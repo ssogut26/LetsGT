@@ -84,6 +84,7 @@ class AuthService implements AmplifyAuthService {
         final prompt = parameters['prompt']!;
         safePrint(prompt);
         break;
+        // I will add later
       // case AuthSignInStep.resetPassword:
       //   final resetResult = await Amplify.Auth.resetPassword(
       //     username: username,
