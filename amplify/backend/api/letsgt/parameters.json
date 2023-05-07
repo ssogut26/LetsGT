@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "letsgt",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authletsgt6b00a594",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

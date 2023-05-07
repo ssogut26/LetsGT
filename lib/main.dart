@@ -1,19 +1,23 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:letsgt/amplifyconfiguration.dart';
+import 'package:letsgt/app.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await _configureAmplify();
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+Future<void> _configureAmplify() async {
+  try {
+    final auth = AmplifyAuthCognito();
+    await Amplify.addPlugin(auth);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-    );
+    // call Amplify.configure to use the initialized categories in your app
+    await Amplify.configure(amplifyconfig);
+  } on Exception catch (e) {
+    safePrint('An error occurred configuring Amplify: $e');
   }
 }
