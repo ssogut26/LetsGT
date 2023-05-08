@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:letsgt/config/routes/routes.dart';
 
 /// With RoutePage annotation, this class will generate
 /// the route information and add it to the app's router.
@@ -15,6 +16,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            AutoRouter.of(context).push(const SignInRoute());
+          },
+          child: const Text('Sign Up'),
+        ),
+      ),
+    );
   }
 }

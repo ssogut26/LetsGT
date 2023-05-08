@@ -91,8 +91,8 @@ class BudgetEntry extends Model {
     } catch (e) {
       throw new AmplifyCodeGenModelException(
         AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-        recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+        recoverySuggestion: AmplifyExceptionMessages
+            .codeGenRequiredFieldForceCastRecoverySuggestion,
         underlyingException: e.toString(),
       );
     }
@@ -108,8 +108,8 @@ class BudgetEntry extends Model {
     } catch (e) {
       throw new AmplifyCodeGenModelException(
         AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-        recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+        recoverySuggestion: AmplifyExceptionMessages
+            .codeGenRequiredFieldForceCastRecoverySuggestion,
         underlyingException: e.toString(),
       );
     }
@@ -148,11 +148,17 @@ class BudgetEntry extends Model {
     buffer.write('id=' + '$id' + ', ');
     buffer.write('title=' + '$_title' + ', ');
     buffer.write('description=' + '$_description' + ', ');
-    buffer.write('amount=' + (_amount != null ? _amount!.toString() : 'null') + ', ');
     buffer.write(
-      'createdAt=' + (_createdAt != null ? _createdAt!.format() : 'null') + ', ',
+      'amount=' + (_amount != null ? _amount!.toString() : 'null') + ', ',
     );
-    buffer.write('updatedAt=' + (_updatedAt != null ? _updatedAt!.format() : 'null'));
+    buffer.write(
+      'createdAt=' +
+          (_createdAt != null ? _createdAt!.format() : 'null') +
+          ', ',
+    );
+    buffer.write(
+      'updatedAt=' + (_updatedAt != null ? _updatedAt!.format() : 'null'),
+    );
     buffer.write('}');
 
     return buffer.toString();
@@ -185,8 +191,8 @@ class BudgetEntry extends Model {
         'updatedAt': _updatedAt
       };
 
-  static final QueryModelIdentifier<BudgetEntryModelIdentifier> MODEL_IDENTIFIER =
-      QueryModelIdentifier<BudgetEntryModelIdentifier>();
+  static final QueryModelIdentifier<BudgetEntryModelIdentifier>
+      MODEL_IDENTIFIER = QueryModelIdentifier<BudgetEntryModelIdentifier>();
   static final QueryField ID = QueryField(fieldName: 'id');
   static final QueryField TITLE = QueryField(fieldName: 'title');
   static final QueryField DESCRIPTION = QueryField(fieldName: 'description');
