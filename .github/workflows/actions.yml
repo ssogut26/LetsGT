@@ -27,9 +27,12 @@ jobs:
       - name: 'Create env file'
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
+      - run: dart format .
+      - name: Analyze Dart
+        uses: zgosalvez/github-actions-analyze-dart@v2
       - run: flutter pub get
-      - run: flutter build apk
-      - run: flutter build appbundle
+#       - run: flutter build apk
+#       - run: flutter build appbundle
       - name: Check if there are any changes
         id: verify_diff
         run: |
