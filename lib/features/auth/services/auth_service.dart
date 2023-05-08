@@ -158,9 +158,12 @@ class AuthService implements AmplifyAuthService {
   }
 
   @override
-  Future<void> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<void> signOut() async {
+    try {
+      await Amplify.Auth.signOut();
+    } on AuthException catch (e) {
+      safePrint('Error signing out: ${e.message}');
+    }
   }
 
   @override
