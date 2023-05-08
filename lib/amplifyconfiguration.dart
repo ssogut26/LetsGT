@@ -1,9 +1,4 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-final endpoint = dotenv.env['GRAPHQL_ENDPOINT'];
-final cognitoIdentityPoolId = dotenv.env['COGNITO_IDENITY_POOL_ID'];
-final cognitoUserPoolId = dotenv.env['COGNITO_USER_POOL_ID'];
-final appClientId = dotenv.env['APP_CLIENT_ID'];
+import 'package:letsgt/core/usecases/environment_variables.dart';
 
 final amplifyconfig =
     '''
@@ -15,7 +10,7 @@ final amplifyconfig =
             "awsAPIPlugin": {
                 "letsgt": {
                     "endpointType": "GraphQL",
-                    "endpoint": "$endpoint",
+                    "endpoint": "${EnvironmentVariables.endpoint}",
                     "region": "eu-central-1",
                     "authorizationType": "AMAZON_COGNITO_USER_POOLS"
                 }
@@ -33,15 +28,15 @@ final amplifyconfig =
                 "CredentialsProvider": {
                     "CognitoIdentity": {
                         "Default": {
-                            "PoolId": "$cognitoIdentityPoolId",
+                            "PoolId": "${EnvironmentVariables.cognitoIdentityPoolId}",
                             "Region": "eu-central-1"
                         }
                     }
                 },
                 "CognitoUserPool": {
                     "Default": {
-                        "PoolId": "$cognitoUserPoolId",
-                        "AppClientId": "$appClientId",
+                        "PoolId": "${EnvironmentVariables.cognitoUserPoolId}",
+                        "AppClientId": "${EnvironmentVariables.clientId}",
                         "Region": "eu-central-1"
                     }
                 },
@@ -71,7 +66,7 @@ final amplifyconfig =
                 },
                 "AppSync": {
                     "Default": {
-                        "ApiUrl": "$endpoint",
+                        "ApiUrl": "${EnvironmentVariables.endpoint}",
                         "Region": "eu-central-1",
                         "AuthMode": "AMAZON_COGNITO_USER_POOLS",
                         "ClientDatabasePrefix": "letsgt_AMAZON_COGNITO_USER_POOLS"
