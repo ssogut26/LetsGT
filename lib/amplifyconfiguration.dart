@@ -1,7 +1,6 @@
 import 'package:letsgt/core/usecases/environment_variables.dart';
 
-final amplifyconfig =
-    '''
+final amplifyconfig = '''
  {
     "UserAgent": "aws-amplify-cli/2.0",
     "Version": "1.0",
