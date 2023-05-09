@@ -1,6 +1,8 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_in.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
+import 'package:letsgt/features/auth/presentation/pages/sign_up_confirm.dart';
 import 'package:letsgt/features/home/presentation/pages/home.dart';
 
 part 'routes.gr.dart';
@@ -12,8 +14,45 @@ part 'routes.gr.dart';
 class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: HomeRoute.page, initial: true),
+        AutoRoute(
+          page: HomeRoute.page,
+          initial: true,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
         AutoRoute(page: SignInRoute.page),
         AutoRoute(page: SignUpRoute.page),
+        AutoRoute(page: SignUpConfirmRoute.page),
       ];
+}
+
+class AuthGuard extends AutoRouteGuard {
+  @override
+  Future<void> onNavigation(
+    NavigationResolver resolver,
+    StackRouter router,
+  ) async {
+    // we check if the user is authenticated
+    bool? authenticated;
+    try {
+      final user = await Amplify.Auth.getCurrentUser();
+      if (user != null) {
+        authenticated = true;
+      } else {
+        authenticated = false;
+      }
+    } catch (e) {
+      authenticated = false;
+    }
+    if (authenticated) {
+      // if user is authenticated we continue
+      resolver.next(true);
+    } else {
+      // we redirect the user to our login page
+      await router.push(
+        const SignInRoute(),
+      );
+    }
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:letsgt/app.dart';
+import 'package:letsgt/config/routes/routes.dart';
 
 abstract class AmplifyAuthService {
   String? requestToken;
@@ -10,10 +12,10 @@ abstract class AmplifyAuthService {
   Future<void> signUpUser(
     String name,
     String email,
-    String? phoneNumber,
     String password,
-    String confirmPassword,
-  );
+    String confirmPassword, {
+    String? phoneNumber,
+  });
   Future<void> confirmSignUp(
     String username,
     String confirmationCode,
@@ -23,15 +25,15 @@ abstract class AmplifyAuthService {
     required String newPassword,
     required String confirmationCode,
   });
-  Future<void> resendCode(String email, BuildContext context);
+  Future<void> resendCode(String email);
   Future<void> signOut();
   Future<void> resetPassword();
 }
 
-class AuthService implements AmplifyAuthService {
-  factory AuthService() => _instance;
-  AuthService._();
-  static final AuthService _instance = AuthService._();
+class MyAuthService implements AmplifyAuthService {
+  factory MyAuthService() => _instance;
+  MyAuthService._();
+  static final MyAuthService _instance = MyAuthService._();
 
   @override
   String? requestToken;
@@ -39,8 +41,9 @@ class AuthService implements AmplifyAuthService {
   @override
   Future<void> confirmSignUp(
     String username,
-    String confirmationCode,
-  ) async {
+    String confirmationCode, {
+    WidgetRef? ref,
+  }) async {
     try {
       final result = await Amplify.Auth.confirmSignUp(
         username: username,
@@ -48,16 +51,19 @@ class AuthService implements AmplifyAuthService {
       );
       // Check if further confirmations are needed or if
       // the sign up is complete.
-      await _handleSignUpResult(result);
+      await _handleSignUpResult(result, ref);
     } on AuthException catch (e) {
       safePrint('Error confirming user: ${e.message}');
     }
   }
 
   @override
-  Future<void> resendCode(String email, BuildContext context) {
-    // TODO: implement resendCode
-    throw UnimplementedError();
+  Future<void> resendCode(String email) async {
+    try {
+      await Amplify.Auth.resendSignUpCode(username: email);
+    } on AuthException catch (e) {
+      safePrint('Error resending code: ${e.message}');
+    }
   }
 
   @override
@@ -91,13 +97,17 @@ class AuthService implements AmplifyAuthService {
   }
 
   @override
-  Future<void> signInUser(String username, String password) async {
+  Future<void> signInUser(
+    String username,
+    String password, {
+    WidgetRef? ref,
+  }) async {
     try {
       final result = await Amplify.Auth.signIn(
         username: username,
         password: password,
       );
-      await _handleSignInResult(result);
+      await _handleSignInResult(result, ref);
     } on AuthException catch (e) {
       safePrint('Error signing in: ${e.message}');
     }
@@ -110,7 +120,7 @@ class AuthService implements AmplifyAuthService {
     _handleCodeDelivery(resendResult.codeDeliveryDetails);
   }
 
-  Future<void> _handleSignInResult(SignInResult result) async {
+  Future<void> _handleSignInResult(SignInResult result, WidgetRef? ref) async {
     switch (result.nextStep.signInStep) {
       case AuthSignInStep.confirmSignInWithSmsMfaCode:
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
@@ -133,6 +143,7 @@ class AuthService implements AmplifyAuthService {
         await resendSingUpCode();
         break;
       case AuthSignInStep.done:
+        await ref?.read(appRouterProvider).replace(const HomeRoute());
         safePrint('Sign in is complete');
         break;
     }
@@ -170,36 +181,47 @@ class AuthService implements AmplifyAuthService {
   Future<void> signUpUser(
     String name,
     String email,
-    String? phoneNumber,
     String password,
-    String confirmPassword,
-  ) async {
+    String confirmPassword, {
+    String? phoneNumber,
+    WidgetRef? ref,
+  }) async {
     try {
       final userAttributes = {
         AuthUserAttributeKey.email: email,
         if (phoneNumber != null) AuthUserAttributeKey.phoneNumber: phoneNumber,
-        // additional attributes as needed
+        AuthUserAttributeKey.name: name,
       };
       final result = await Amplify.Auth.signUp(
-        username: name,
+        username: email,
         password: password,
         options: SignUpOptions(
           userAttributes: userAttributes,
         ),
       );
-      await _handleSignUpResult(result);
+      await _handleSignUpResult(result, ref);
     } on AuthException catch (e) {
       safePrint('Error signing up user: ${e.message}');
     }
   }
 
-  Future<void> _handleSignUpResult(SignUpResult result) async {
+  Future<void> _handleSignUpResult(SignUpResult result, WidgetRef? ref) async {
     switch (result.nextStep.signUpStep) {
       case AuthSignUpStep.confirmSignUp:
+        await ref?.read(appRouterProvider).push(const SignUpConfirmRoute());
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
         _handleCodeDelivery(codeDeliveryDetails);
         break;
       case AuthSignUpStep.done:
+        try {
+          await ref?.read(appRouterProvider).push(const SignInRoute());
+        } on AuthException catch (e) {
+          if (e.message ==
+              'User cannot be confirmed. Current status is CONFIRMED') {
+            await ref?.read(appRouterProvider).push(const HomeRoute());
+          }
+          safePrint(e.message);
+        }
         safePrint('Sign up is complete');
         break;
     }
@@ -208,6 +230,7 @@ class AuthService implements AmplifyAuthService {
   Future<void> confirmUser({
     required String username,
     required String confirmationCode,
+    WidgetRef? ref,
   }) async {
     try {
       final result = await Amplify.Auth.confirmSignUp(
@@ -216,7 +239,7 @@ class AuthService implements AmplifyAuthService {
       );
       // Check if further confirmations are needed or if
       // the sign up is complete.
-      await _handleSignUpResult(result);
+      await _handleSignUpResult(result, ref);
     } on AuthException catch (e) {
       safePrint('Error confirming user: ${e.message}');
     }

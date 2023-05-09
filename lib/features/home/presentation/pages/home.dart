@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            AutoRouter.of(context).push(const SignInRoute());
+            AutoRouter.of(context).push(const SignUpRoute());
           },
           child: const Text('Sign Up'),
         ),
