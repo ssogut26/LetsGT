@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppPaddings {
-  static const EdgeInsetsGeometry pagePadding = EdgeInsets.all(16);
+  static const EdgeInsetsGeometry pagePadding =
+      EdgeInsets.symmetric(horizontal: 16);
   static const EdgeInsetsGeometry textPadding = EdgeInsets.symmetric(
     horizontal: 8,
   );

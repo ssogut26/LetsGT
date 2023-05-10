@@ -1,51 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
-import 'package:letsgt/features/auth/services/auth_service.dart';
-
-class SignUpNotifier extends ChangeNotifier {
-  String _name = '';
-  String _email = '';
-  String _phone = '';
-  String _password = '';
-  String _confirmPassword = '';
-
-  String get name => _name;
-  String get email => _email;
-  String get phone => _phone;
-  String get password => _password;
-  String get confirmPassword => _confirmPassword;
-
-  set setName(String name) {
-    _name = name;
-  }
-
-  set setEmail(String email) {
-    _email = email;
-  }
-
-  set setPhone(String phone) {
-    _phone = phone;
-  }
-
-  set setPassword(String password) {
-    _password = password;
-  }
-
-  set setConfirmPassword(String confirmPassword) {
-    _confirmPassword = confirmPassword;
-  }
-
-  Future<void> signUp(WidgetRef ref) async {
-    await MyAuthService()
-        .signUpUser(name, email, password, confirmPassword, ref: ref);
-  }
-}
-
-final signUpProvider = ChangeNotifierProvider<SignUpNotifier>((ref) {
-  return SignUpNotifier();
-});
+import 'package:letsgt/features/auth/presentation/providers/sign_up_providers.dart';
 
 @RoutePage()
 class SignUpPage extends ConsumerStatefulWidget {
@@ -87,8 +45,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               AppElevatedButton(
                 text: 'SIGN ME UP',
                 onPressed: () {
-                  if (formKey.currentState?.validate() ?? false) {
-                    ref.read(signUpProvider).signUp(ref);
+                  try {
+                    if (formKey.currentState?.validate() ?? false) {
+                      formKey.currentState?.save();
+                      ref.read(signUpProvider).signUp(ref, context);
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please fill in the form'),
+                      ),
+                    );
                   }
                 },
               ),
@@ -102,7 +69,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     color: Color(0xFF656589),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  AutoRouter.of(context).popAndPush(
+                    const SignInRoute(),
+                  );
+                },
               ),
             ],
           ),

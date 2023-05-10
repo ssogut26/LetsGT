@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_in.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up_confirm.dart';
+import 'package:letsgt/features/create_activity/presentation/pages/create_activity.dart';
 import 'package:letsgt/features/home/presentation/pages/home.dart';
 
 part 'routes.gr.dart';
@@ -24,6 +25,13 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: SignInRoute.page),
         AutoRoute(page: SignUpRoute.page),
         AutoRoute(page: SignUpConfirmRoute.page),
+        AutoRoute(
+          page: CreateActivityRoute.page,
+          fullscreenDialog: true,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
       ];
 }
 
@@ -37,7 +45,7 @@ class AuthGuard extends AutoRouteGuard {
     bool? authenticated;
     try {
       final user = await Amplify.Auth.getCurrentUser();
-      if (user != null) {
+      if (user.username.isNotEmpty) {
         authenticated = true;
       } else {
         authenticated = false;

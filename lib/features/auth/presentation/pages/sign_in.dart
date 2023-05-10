@@ -4,35 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
-import 'package:letsgt/features/auth/services/auth_service.dart';
-
-class SignInNotifier extends ChangeNotifier {
-  String _email = '';
-  String _password = '';
-
-  String get email => _email;
-  String get password => _password;
-
-  set setEmail(String email) {
-    _email = email;
-  }
-
-  set setPassword(String password) {
-    _password = password;
-  }
-
-  Future<void> signIn(WidgetRef ref) async {
-    await MyAuthService().signInUser(
-      _email,
-      _password,
-      ref: ref,
-    );
-  }
-}
-
-final signInProvider = ChangeNotifierProvider(
-  (ref) => SignInNotifier(),
-);
+import 'package:letsgt/features/auth/presentation/providers/sign_in_providers.dart';
 
 @RoutePage()
 class SignInPage extends ConsumerStatefulWidget {
@@ -68,7 +40,13 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    ref.read(signInProvider.notifier).signIn(ref);
+                    ref.read(signInProvider.notifier).signIn(ref, context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please fill in the form'),
+                      ),
+                    );
                   }
                 },
                 text: 'Sign In',

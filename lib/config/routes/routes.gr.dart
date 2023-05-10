@@ -33,6 +33,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SignUpConfirmPage(),
       );
     },
+    CreateActivityRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CreateActivityPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -80,6 +86,20 @@ class SignUpConfirmRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'SignUpConfirmRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CreateActivityPage]
+class CreateActivityRoute extends PageRouteInfo<void> {
+  const CreateActivityRoute({List<PageRouteInfo>? children})
+      : super(
+          CreateActivityRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CreateActivityRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
