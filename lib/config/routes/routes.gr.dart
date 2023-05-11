@@ -39,6 +39,14 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const CreateActivityPage(),
       );
     },
+    MapRoute.name: (routeData) {
+      final args =
+          routeData.argsAs<MapRouteArgs>(orElse: () => const MapRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MapPage(key: args.key),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -102,6 +110,34 @@ class CreateActivityRoute extends PageRouteInfo<void> {
   static const String name = 'CreateActivityRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [MapPage]
+class MapRoute extends PageRouteInfo<MapRouteArgs> {
+  MapRoute({
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          MapRoute.name,
+          args: MapRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'MapRoute';
+
+  static const PageInfo<MapRouteArgs> page = PageInfo<MapRouteArgs>(name);
+}
+
+class MapRouteArgs {
+  const MapRouteArgs({this.key});
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'MapRouteArgs{key: $key}';
+  }
 }
 
 /// generated route for

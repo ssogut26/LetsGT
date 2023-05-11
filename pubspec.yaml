@@ -22,9 +22,11 @@ dependencies:
   geolocator: ^9.0.2
   google_maps: ^6.2.0
   google_maps_flutter: ^2.2.6
+  http: ^0.13.6
   image_picker: ^0.8.7+4
   mockito: ^5.4.0
   permission_handler: ^10.2.0
+  permission_handler_web: ^0.0.2
   riverpod: ^2.3.6
   yandex_mapkit: ^3.2.0
 

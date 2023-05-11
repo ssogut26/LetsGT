@@ -5,11 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/amplifyconfiguration.dart';
 import 'package:letsgt/app.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   await _configureAmplify();
+  await Permission.location.request();
+  await Permission.locationAlways.request();
   runApp(const ProviderScope(child: MyApp()));
 }
 

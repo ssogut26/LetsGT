@@ -96,6 +96,14 @@ class MyAuthService implements AmplifyAuthService {
         context,
       );
     } on AuthException catch (e) {
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+        ),
+      );
+      if (e.message == 'A user is already signed in.') {
+        await ref?.read(appRouterProvider).replace(const HomeRoute());
+      }
       safePrint('Error signing in: ${e.message}');
     }
   }
@@ -134,12 +142,21 @@ class MyAuthService implements AmplifyAuthService {
         await resendSingUpCode();
         break;
       case AuthSignInStep.done:
-        ScaffoldMessenger.of(context!).showSnackBar(
-          const SnackBar(
-            content: Text('Sign in is complete'),
-          ),
-        );
-        await ref?.read(appRouterProvider).replace(const SignInRoute());
+        try {
+          ScaffoldMessenger.of(context!).showSnackBar(
+            const SnackBar(
+              content: Text('Sign in is complete'),
+            ),
+          );
+          await ref?.read(appRouterProvider).replace(const HomeRoute());
+        } on AuthException catch (e) {
+          ScaffoldMessenger.of(context!).showSnackBar(
+            SnackBar(
+              content: Text(e.message),
+            ),
+          );
+        }
+
         safePrint('Sign in is complete');
         break;
     }

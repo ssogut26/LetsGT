@@ -259,7 +259,8 @@ class ConfirmPasswordField extends ConsumerWidget {
             validator: (String? value) {
               if ((value?.isEmpty ?? true) || value == null) {
                 return 'Please enter your password again';
-              } else if (value != ref.read(passwordProvider.notifier).state) {
+              } else if (value !=
+                  ref.read(passwordProvider.notifier).password) {
                 return 'Your passwords do not match';
               }
               return null;
