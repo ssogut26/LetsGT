@@ -11,12 +11,10 @@ class NetworkEntities {
         uri,
         headers: headers,
       );
-      
+
       if (response.statusCode == 200) {
-       
         return response.body;
       } else {
-
         return 'Error';
       }
     } catch (e) {

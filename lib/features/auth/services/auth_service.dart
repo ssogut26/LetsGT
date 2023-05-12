@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +7,6 @@ import 'package:letsgt/app.dart';
 import 'package:letsgt/config/routes/routes.dart';
 
 abstract class AmplifyAuthService {
-  String? requestToken;
   Future<void> signInUser(
     String username,
     String password,
@@ -28,16 +29,15 @@ abstract class AmplifyAuthService {
   });
   Future<void> resendCode(String email);
   Future<void> signOut();
-  Future<void> resetPassword();
+  Future<void> resetPassword({
+    String? username,
+  });
 }
 
 class MyAuthService implements AmplifyAuthService {
   factory MyAuthService() => _instance;
   MyAuthService._();
   static final MyAuthService _instance = MyAuthService._();
-
-  @override
-  String? requestToken;
 
   @override
   Future<void> resendCode(String email) async {
