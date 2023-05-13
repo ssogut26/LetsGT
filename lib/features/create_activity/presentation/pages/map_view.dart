@@ -62,14 +62,14 @@ class _MapPageState extends ConsumerState<MapPage> {
     }
   }
 
-  String? placeH;
+  PlacesDetailsResponse? details;
   LatLng? position;
   String? markerId;
   Future<void> navigateTo(String place) async {
-    placeH = place;
-    final details = await places.getDetailsByPlaceId(place);
-    final lat = details.result.geometry?.location.lat ?? 0;
-    final lng = details.result.geometry?.location.lng ?? 0;
+    details = await places.getDetailsByPlaceId(place);
+    final lat = details?.result.geometry?.location.lat ?? 0;
+    final lng = details?.result.geometry?.location.lng ?? 0;
+
     position = LatLng(lat, lng);
     final controllerValue = await controller.future;
     await controllerValue
@@ -82,7 +82,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       ),
     )
         .then((_) async {
-      await Future.delayed(const Duration(seconds: 1));
+      await Future<void>.delayed(const Duration(seconds: 1));
       await controllerValue.showMarkerInfoWindow(const MarkerId('1'));
     });
   }
@@ -162,24 +162,27 @@ class _MapPageState extends ConsumerState<MapPage> {
                 mapToolbarEnabled: true,
                 indoorViewEnabled: true,
                 cameraTargetBounds: CameraTargetBounds.unbounded,
-                onTap: (value) {
+                tiltGesturesEnabled: true,
+                buildingsEnabled: true,
+                myLocationButtonEnabled: true,
+                onLongPress: (value) async {
+                  
+                  // ADD MARKER
                   setState(() {
                     position = value;
                   });
                 },
-                tiltGesturesEnabled: true,
-                buildingsEnabled: true,
-                myLocationButtonEnabled: true,
                 markers: {
                   Marker(
+                    markerId: const MarkerId('1'),
+                    position: position!,
+                    onTap: () {
+                      
+                    },
                     infoWindow: InfoWindow(
-                      title: placeH,
-                      snippet: '1',
-                      onTap: () => print('tapped'),
+                      title: details?.result.formattedAddress ?? '',
+                      snippet: 'Location',
                     ),
-                    consumeTapEvents: true,
-                    markerId: MarkerId(markerId ?? '1'),
-                    position: position ?? center,
                   ),
                 },
               ),

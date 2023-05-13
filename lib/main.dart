@@ -17,7 +17,7 @@ Future<void> main() async {
   );
   await FlutterConfigPlus.loadEnvVariables();
   await _configureAmplify();
-  await Permission.location.request();
+  await Permission.locationWhenInUse.request();
   runApp(const ProviderScope(child: MyApp()));
 }
 

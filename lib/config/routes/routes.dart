@@ -1,12 +1,12 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_in.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up_confirm.dart';
 import 'package:letsgt/features/create_activity/presentation/pages/create_activity.dart';
 import 'package:letsgt/features/create_activity/presentation/pages/map_view.dart';
 import 'package:letsgt/features/home/presentation/pages/home.dart';
+import 'package:letsgt/features/messages/presentation/pages/messages.dart';
 
 part 'routes.gr.dart';
 
@@ -37,6 +37,12 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           page: MapRoute.page,
           fullscreenDialog: true,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
+        AutoRoute(
+          page: MessagesRoute.page,
           guards: [
             AuthGuard(),
           ],

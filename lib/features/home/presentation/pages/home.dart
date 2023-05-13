@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           if (index == 0) {
             context.router.push(const HomeRoute());
           } else if (index == 1) {
-            context.router.push(const SignInRoute());
+            context.router.push(const MessagesRoute());
           } else if (index == 2) {
             context.router.push(const SignInRoute());
           } else if (index == 3) {
