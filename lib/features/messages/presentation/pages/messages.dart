@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
 
 @RoutePage()
@@ -33,7 +34,33 @@ class _MessagesPageState extends State<MessagesPage> {
         title: const Text('Messages'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Pick a user to send a message'),
+              content: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: const CircleAvatar(),
+                    title: const Text('Name'),
+                    subtitle: const Text('Status'),
+                    onTap: () async {
+                      // Close the dialog.
+                      Navigator.of(context).pop();
+                      // Navigate to the MessagesPage.
+                      await AutoRouter.of(context).push(
+                        const ChatRoute(),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          );
+        },
         child: const Icon(Icons.message),
       ),
       body: const Padding(
@@ -45,9 +72,9 @@ class _MessagesPageState extends State<MessagesPage> {
               children: [
                 CircleAvatar(),
                 SizedBox(width: 8),
-                Text('ASD'),
+                Text('Name'),
                 SizedBox(width: 8),
-                Text('ASD'),
+                Text('Surname'),
               ],
             ),
           ],

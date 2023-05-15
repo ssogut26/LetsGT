@@ -55,7 +55,7 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                 trailing: IconButton(
                   onPressed: () {
                     AutoRouter.of(context).push(
-                      MapRoute(),
+                      const MapRoute(),
                     );
                   },
                   icon: const Icon(Icons.map),

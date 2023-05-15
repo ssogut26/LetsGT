@@ -66,16 +66,22 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         onDestinationSelected: (index) {
-          if (index == 0) {
-            context.router.push(const HomeRoute());
-          } else if (index == 1) {
-            context.router.push(const MessagesRoute());
-          } else if (index == 2) {
-            context.router.push(const SignInRoute());
-          } else if (index == 3) {
-            context.router.push(const SignInRoute());
-          } else {
-            context.router.push(const SignInRoute());
+          switch (index) {
+            case 0:
+              context.router.push(const HomeRoute());
+              break;
+            case 1:
+              context.router.push(const MessagesRoute());
+              break;
+            case 2:
+              context.router.push(const ActivitiesRoute());
+              break;
+            case 3:
+              context.router.push(const ProfileRoute());
+              break;
+            default:
+              context.router.push(const SignInRoute());
+              break;
           }
         },
       ),

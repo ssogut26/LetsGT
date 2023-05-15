@@ -1,12 +1,15 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:letsgt/features/activities/presentation/pages/activities.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_in.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up_confirm.dart';
 import 'package:letsgt/features/create_activity/presentation/pages/create_activity.dart';
 import 'package:letsgt/features/create_activity/presentation/pages/map_view.dart';
 import 'package:letsgt/features/home/presentation/pages/home.dart';
+import 'package:letsgt/features/messages/presentation/pages/chat.dart';
 import 'package:letsgt/features/messages/presentation/pages/messages.dart';
+import 'package:letsgt/features/profile/presentation/pages/profile.dart';
 
 part 'routes.gr.dart';
 
@@ -43,6 +46,24 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: MessagesRoute.page,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
+        AutoRoute(
+          page: ChatRoute.page,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
+        AutoRoute(
+          page: ActivitiesRoute.page,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
+        AutoRoute(
+          page: ProfileRoute.page,
           guards: [
             AuthGuard(),
           ],
