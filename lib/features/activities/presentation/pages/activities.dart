@@ -27,9 +27,6 @@ class _ActivitiesPageState extends State<ActivitiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Activities'),
-      ),
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {

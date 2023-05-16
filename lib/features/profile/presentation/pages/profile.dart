@@ -14,14 +14,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.edit),
-          ),
-        ],
-      ),
       body: Padding(
         padding: AppPaddings.pagePadding,
         child: Column(
@@ -59,11 +51,74 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             const Divider(),
-            const Column(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('My Activities'),
-                Text('App Settings'),
-                Text('Log Out'),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: const Card(
+                    child: Padding(
+                      padding: AppPaddings.textPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('My Activities'),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: const Card(
+                    child: Padding(
+                      padding: AppPaddings.textPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Feature'),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: const Card(
+                    child: Padding(
+                      padding: AppPaddings.textPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Feature'),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: const Card(
+                    child: Padding(
+                      padding: AppPaddings.textPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('App Settings'),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: const Card(
+                    child: Padding(
+                      padding: AppPaddings.textPadding,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Log Out'),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             )
           ],

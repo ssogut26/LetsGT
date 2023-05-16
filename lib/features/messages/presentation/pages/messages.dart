@@ -30,9 +30,6 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Messages'),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog<void>(

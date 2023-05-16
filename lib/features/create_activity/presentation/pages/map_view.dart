@@ -101,93 +101,102 @@ class _MapPageState extends ConsumerState<MapPage> {
         title: const Text('Select Location'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: AppPaddings.pagePadding,
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Search Location',
-                  prefixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) {
-                  if (value.isEmpty || value == '') {
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              SizedBox(
+                child: GoogleMap(
+                  onMapCreated: controller.complete,
+                  initialCameraPosition: CameraPosition(
+                    target: center,
+                    zoom: 14,
+                  ),
+                  myLocationEnabled: true,
+                  mapToolbarEnabled: true,
+                  indoorViewEnabled: true,
+                  cameraTargetBounds: CameraTargetBounds.unbounded,
+                  tiltGesturesEnabled: true,
+                  buildingsEnabled: true,
+                  myLocationButtonEnabled: true,
+                  onLongPress: (value) async {
+                    // ADD MARKER
                     setState(() {
-                      isSearching = false;
+                      position = value;
                     });
-                  } else {
-                    isSearching = true;
-                  }
-                  final prediction =
-                      ref.read(searchQueryProvider).setQuery = value;
-                  searchLocation(prediction);
-                  // print(placePredictions.length);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height:
-                  isSearching ? MediaQuery.of(context).size.height * 0.2 : 0,
-              child: ListView.builder(
-                itemCount: placePredictions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(placePredictions[index].description ?? ''),
-                    onTap: () async {
-                      ref.read(searchQueryProvider).setQuery = '';
-                      setState(() {
-                        isSearching = false;
-                      });
-                      FocusScope.of(context).unfocus();
-                      await navigateTo(placePredictions[index].placeId ?? '');
-                    },
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: isSearching
-                  ? MediaQuery.of(context).size.height * 0.6
-                  : MediaQuery.of(context).size.height * 0.7,
-              child: GoogleMap(
-                onMapCreated: controller.complete,
-                initialCameraPosition: CameraPosition(
-                  target: center,
-                  zoom: 14,
+                  },
+                  markers: position == null
+                      ? {}
+                      : {
+                          Marker(
+                            markerId: const MarkerId('1'),
+                            position: position!,
+                            onTap: () {},
+                            infoWindow: InfoWindow(
+                              title: details?.result.formattedAddress ?? '',
+                              snippet: 'Location',
+                            ),
+                          ),
+                        },
                 ),
-                myLocationEnabled: true,
-                mapToolbarEnabled: true,
-                indoorViewEnabled: true,
-                cameraTargetBounds: CameraTargetBounds.unbounded,
-                tiltGesturesEnabled: true,
-                buildingsEnabled: true,
-                myLocationButtonEnabled: true,
-                onLongPress: (value) async {
-                  
-                  // ADD MARKER
-                  setState(() {
-                    position = value;
-                  });
-                },
-                markers: {
-                  Marker(
-                    markerId: const MarkerId('1'),
-                    position: position!,
-                    onTap: () {
-                      
-                    },
-                    infoWindow: InfoWindow(
-                      title: details?.result.formattedAddress ?? '',
-                      snippet: 'Location',
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: AppPaddings.pagePadding,
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Search Location',
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                      focusNode: FocusNode(
+                        skipTraversal: true,
+                      ),
+                      onChanged: (value) {
+                        if (value.isEmpty || value == '') {
+                          setState(() {
+                            isSearching = false;
+                          });
+                        } else {
+                          isSearching = true;
+                        }
+                        final prediction =
+                            ref.read(searchQueryProvider).setQuery = value;
+                        searchLocation(prediction);
+                        // print(placePredictions.length);
+                      },
                     ),
                   ),
-                },
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: ListView.builder(
+                      itemCount: placePredictions.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          selectedTileColor: Colors.grey[300],
+                          hoverColor: Colors.grey[300],
+                          title:
+                              Text(placePredictions[index].description ?? ''),
+                          onTap: () async {
+                            ref.read(searchQueryProvider).setQuery = '';
+                            setState(() {
+                              isSearching = false;
+                            });
+                            FocusScope.of(context).unfocus();
+                            await navigateTo(
+                              placePredictions[index].placeId ?? '',
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
