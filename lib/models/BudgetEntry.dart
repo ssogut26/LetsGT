@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars, strict_raw_type, cascade_invocations
+
 /*
 * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 *

@@ -1,6 +1,22 @@
-type BudgetEntry @model @auth(rules: [{ allow: owner }]) {
+type ActivityModel @model @auth(rules: [{allow: private}]) {
   id: ID!
-  title: String!
-  description: String
-  amount: Float!
+  activityName: String!
+  activityDescription: String!
+  selectedLocation: String!
+  selectedDate: String!
+  participants: String
 }
+
+type FriendList {
+  friendName: String
+  friendStatus: String
+}
+
+type UserModel @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  userName: String
+  location: String
+  userStatus: String
+  friends: FriendList
+}
+ 

@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3letsgtstorage773682b8",
+  "bucketName": "letsgt-storage-773682b8",
+  "policyUUID": "83d0da20",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
