@@ -5,7 +5,7 @@ import 'package:letsgt/features/auth/services/auth_service.dart';
 class SignUpConfirmNotifier extends ChangeNotifier {
   String _code = '';
   String email = '';
-
+  bool isLoading = false;
   String get code => _code;
 
   set setCode(String code) {
@@ -17,11 +17,18 @@ class SignUpConfirmNotifier extends ChangeNotifier {
   }
 
   Future<void> confirm(WidgetRef ref, String email) async {
-    await MyAuthService().confirmSignUp(
+    isLoading = true;
+    notifyListeners();
+    await MyAuthService()
+        .confirmSignUp(
       email,
       code,
       ref: ref,
-    );
+    )
+        .whenComplete(() {
+      isLoading = false;
+      notifyListeners();
+    });
   }
 }
 

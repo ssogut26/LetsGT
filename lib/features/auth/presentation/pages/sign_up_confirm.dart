@@ -17,39 +17,55 @@ class SignUpConfirmPage extends ConsumerWidget {
         title: const Text('Confirm Sign Up'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          EmailField(
-            isConfirm: true,
-            text: email,
+          SizedBox(
+            height: MediaQuery.of(context).viewInsets.bottom == 0
+                ? MediaQuery.of(context).size.height * 0.1
+                : MediaQuery.of(context).size.height * 0.01,
+          ),
+          const FlutterLogo(
+            size: 35,
+          ),
+          Column(
+            children: [
+              SignUpEmailField(
+                isConfirm: true,
+                text: email,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Confirmation Code',
+                  ),
+                  onChanged: (value) {
+                    ref.read(signUpConfirmProvider.notifier).setCode = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              TextButton(
+                onPressed: () {
+                  ref.read(signUpConfirmProvider.notifier).resendCode(email);
+                },
+                child: const Text('Resend code'),
+              ),
+              AppElevatedButton(
+                onPressed: () {
+                  ref.read(signUpConfirmProvider.notifier).confirm(ref, email);
+                },
+                text: 'Confirm',
+              ),
+            ],
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.75,
-            child: TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Confirmation Code',
-              ),
-              onChanged: (value) {
-                ref.read(signUpConfirmProvider.notifier).setCode = value;
-              },
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          TextButton(
-            onPressed: () {
-              ref.read(signUpConfirmProvider.notifier).resendCode(email);
-            },
-            child: const Text('Resend code'),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          AppElevatedButton(
-            onPressed: () {
-              ref.read(signUpConfirmProvider.notifier).confirm(ref, email);
-            },
-            text: 'Confirm',
+            height: MediaQuery.of(context).viewInsets.bottom == 0
+                ? MediaQuery.of(context).size.height * 0.1
+                : MediaQuery.of(context).size.height * 0.01,
           ),
         ],
       ),

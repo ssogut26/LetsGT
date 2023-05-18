@@ -55,7 +55,7 @@ class HomePage extends ConsumerWidget {
               shape: const CircleBorder(),
               mini: true,
               onPressed: () {
-                context.router.push(const CreateActivityRoute());
+                context.router.push(CreateActivityRoute());
               },
               child: const Icon(Icons.add),
             )

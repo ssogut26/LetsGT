@@ -49,13 +49,22 @@ class MyAuthService implements AmplifyAuthService {
   }
 
   @override
-  Future<void> resetPassword({String? username}) async {
+  Future<void> resetPassword({
+    String? username,
+    BuildContext? context,
+    WidgetRef? ref,
+  }) async {
     try {
       final result = await Amplify.Auth.resetPassword(
         username: username ?? '',
       );
-      return _handleResetPasswordResult(result);
+      await _handleResetPasswordResult(result, context, ref);
     } on AuthException catch (e) {
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+        ),
+      );
       safePrint('Error resetting password: ${e.message}');
     }
   }
@@ -65,6 +74,8 @@ class MyAuthService implements AmplifyAuthService {
     required String username,
     required String newPassword,
     required String confirmationCode,
+    BuildContext? context,
+    WidgetRef? ref,
   }) async {
     try {
       final result = await Amplify.Auth.confirmResetPassword(
@@ -72,9 +83,15 @@ class MyAuthService implements AmplifyAuthService {
         newPassword: newPassword,
         confirmationCode: confirmationCode,
       );
+
       safePrint('Password reset complete: ${result.isPasswordReset}');
     } on AuthException catch (e) {
-      safePrint('Error resetting password: ${e.message}');
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+        ),
+      );
+      safePrint('Error confirming reset password: ${e.message}');
     }
   }
 
@@ -124,23 +141,18 @@ class MyAuthService implements AmplifyAuthService {
       case AuthSignInStep.confirmSignInWithSmsMfaCode:
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
         _handleCodeDelivery(codeDeliveryDetails);
-        break;
       case AuthSignInStep.confirmSignInWithNewPassword:
         safePrint('Enter a new password to continue signing in');
-        break;
       case AuthSignInStep.confirmSignInWithCustomChallenge:
         final parameters = result.nextStep.additionalInfo;
         final prompt = parameters['prompt']!;
         safePrint(prompt);
-        break;
       // I will add later
       case AuthSignInStep.resetPassword:
         await resetPassword();
-        break;
       case AuthSignInStep.confirmSignUp:
         // Resend the sign up code to the registered device.
         await resendSingUpCode();
-        break;
       case AuthSignInStep.done:
         try {
           ScaffoldMessenger.of(context!).showSnackBar(
@@ -158,19 +170,29 @@ class MyAuthService implements AmplifyAuthService {
         }
 
         safePrint('Sign in is complete');
-        break;
     }
   }
 
-  Future<void> _handleResetPasswordResult(ResetPasswordResult result) async {
+  Future<void> _handleResetPasswordResult(
+    ResetPasswordResult result,
+    BuildContext? context,
+    WidgetRef? ref,
+  ) async {
     switch (result.nextStep.updateStep) {
       case AuthResetPasswordStep.confirmResetPasswordWithCode:
+        await ref?.read(appRouterProvider).push(
+              const ConfirmResetPasswordRoute(),
+            );
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
         _handleCodeDelivery(codeDeliveryDetails);
-        break;
       case AuthResetPasswordStep.done:
+        await ref?.read(appRouterProvider).replace(const SignInRoute());
+        ScaffoldMessenger.of(context!).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully reset password'),
+          ),
+        );
         safePrint('Successfully reset password');
-        break;
     }
   }
 
@@ -182,9 +204,18 @@ class MyAuthService implements AmplifyAuthService {
   }
 
   @override
-  Future<void> signOut() async {
+  Future<void> signOut({
+    BuildContext? context,
+    WidgetRef? ref,
+  }) async {
     try {
       await Amplify.Auth.signOut();
+      await ref?.read(appRouterProvider).replace(const SignInRoute());
+      ScaffoldMessenger.of(context!).showSnackBar(
+        const SnackBar(
+          content: Text('Sign out is complete'),
+        ),
+      );
     } on AuthException catch (e) {
       safePrint('Error signing out: ${e.message}');
     }
@@ -229,7 +260,6 @@ class MyAuthService implements AmplifyAuthService {
         await ref?.read(appRouterProvider).push(const SignUpConfirmRoute());
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
         _handleCodeDelivery(codeDeliveryDetails);
-        break;
       case AuthSignUpStep.done:
         try {
           await ref?.read(appRouterProvider).push(const SignInRoute());
@@ -241,7 +271,6 @@ class MyAuthService implements AmplifyAuthService {
           );
         }
         safePrint('Sign up is complete');
-        break;
     }
   }
 

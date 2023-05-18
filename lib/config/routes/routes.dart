@@ -1,6 +1,9 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:letsgt/features/activities/presentation/pages/activities.dart';
+import 'package:letsgt/features/auth/presentation/pages/confirm_reset_password.dart';
+import 'package:letsgt/features/auth/presentation/pages/reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_in.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up_confirm.dart';
@@ -28,6 +31,8 @@ class AppRouter extends _$AppRouter {
           ],
         ),
         AutoRoute(page: SignInRoute.page),
+        AutoRoute(page: ResetPasswordRoute.page),
+        AutoRoute(page: ConfirmResetPasswordRoute.page),
         AutoRoute(page: SignUpRoute.page),
         AutoRoute(page: SignUpConfirmRoute.page),
         AutoRoute(

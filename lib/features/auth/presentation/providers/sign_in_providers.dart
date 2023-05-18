@@ -5,6 +5,7 @@ import 'package:letsgt/features/auth/services/auth_service.dart';
 class SignInNotifier extends ChangeNotifier {
   String _email = '';
   String _password = '';
+  bool isLoading = false;
 
   String get email => _email;
   String get password => _password;
@@ -18,12 +19,19 @@ class SignInNotifier extends ChangeNotifier {
   }
 
   Future<void> signIn(WidgetRef ref, BuildContext context) async {
-    await MyAuthService().signInUser(
+    isLoading = true;
+    notifyListeners();
+    await MyAuthService()
+        .signInUser(
       _email,
       _password,
       ref: ref,
       context: context,
-    );
+    )
+        .whenComplete(() {
+      isLoading = false;
+      notifyListeners();
+    });
   }
 }
 

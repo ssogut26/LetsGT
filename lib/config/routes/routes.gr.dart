@@ -21,6 +21,18 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ActivitiesPage(),
       );
     },
+    ConfirmResetPasswordRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ConfirmResetPasswordPage(),
+      );
+    },
+    ResetPasswordRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ResetPasswordPage(),
+      );
+    },
     SignInRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -40,9 +52,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     CreateActivityRoute.name: (routeData) {
+      final args = routeData.argsAs<CreateActivityRouteArgs>(
+          orElse: () => const CreateActivityRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CreateActivityPage(),
+        child: CreateActivityPage(
+          key: args.key,
+          locationInfo: args.locationInfo,
+        ),
       );
     },
     MapRoute.name: (routeData) {
@@ -93,6 +110,34 @@ class ActivitiesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ConfirmResetPasswordPage]
+class ConfirmResetPasswordRoute extends PageRouteInfo<void> {
+  const ConfirmResetPasswordRoute({List<PageRouteInfo>? children})
+      : super(
+          ConfirmResetPasswordRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ConfirmResetPasswordRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ResetPasswordPage]
+class ResetPasswordRoute extends PageRouteInfo<void> {
+  const ResetPasswordRoute({List<PageRouteInfo>? children})
+      : super(
+          ResetPasswordRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ResetPasswordRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [SignInPage]
 class SignInRoute extends PageRouteInfo<void> {
   const SignInRoute({List<PageRouteInfo>? children})
@@ -136,16 +181,40 @@ class SignUpConfirmRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [CreateActivityPage]
-class CreateActivityRoute extends PageRouteInfo<void> {
-  const CreateActivityRoute({List<PageRouteInfo>? children})
-      : super(
+class CreateActivityRoute extends PageRouteInfo<CreateActivityRouteArgs> {
+  CreateActivityRoute({
+    Key? key,
+    String? locationInfo,
+    List<PageRouteInfo>? children,
+  }) : super(
           CreateActivityRoute.name,
+          args: CreateActivityRouteArgs(
+            key: key,
+            locationInfo: locationInfo,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CreateActivityRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<CreateActivityRouteArgs> page =
+      PageInfo<CreateActivityRouteArgs>(name);
+}
+
+class CreateActivityRouteArgs {
+  const CreateActivityRouteArgs({
+    this.key,
+    this.locationInfo,
+  });
+
+  final Key? key;
+
+  final String? locationInfo;
+
+  @override
+  String toString() {
+    return 'CreateActivityRouteArgs{key: $key, locationInfo: $locationInfo}';
+  }
 }
 
 /// generated route for

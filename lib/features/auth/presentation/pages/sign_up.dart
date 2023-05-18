@@ -23,59 +23,57 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         key: formKey,
         child: Padding(
           padding: AppPaddings.pagePadding,
-          child: ListView(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-              ),
-              const FlutterLogo(
-                size: 35,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.08,
-              ),
-              const NameField(),
-              const EmailField(),
-              const PhoneField(),
-              const PasswordField(),
-              const ConfirmPasswordField(),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              AppElevatedButton(
-                text: 'SIGN ME UP',
-                onPressed: () {
-                  try {
-                    if (formKey.currentState?.validate() ?? false) {
-                      formKey.currentState?.save();
-                      ref.read(signUpProvider).signUp(ref, context);
-                    }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill in the form'),
-                      ),
-                    );
-                  }
-                },
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
-              TextButton(
-                child: const Text(
-                  'Already have an account?',
-                  style: TextStyle(
-                    color: Color(0xFF656589),
+          child: SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.08,
                   ),
-                ),
-                onPressed: () {
-                  AutoRouter.of(context).popAndPush(
-                    const SignInRoute(),
-                  );
-                },
+                  const FlutterLogo(
+                    size: 35,
+                  ),
+                  const Column(
+                    children: [
+                      NameField(),
+                      SignUpEmailField(),
+                      PhoneField(),
+                      PasswordField(),
+                      ConfirmPasswordField(),
+                    ],
+                  ),
+                  AppElevatedButton(
+                    text: 'SIGN ME UP',
+                    onPressed: () {
+                      try {
+                        if (formKey.currentState?.validate() ?? false) {
+                          formKey.currentState?.save();
+                          ref.read(signUpProvider).signUp(ref, context);
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill in the form'),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  TextButton(
+                    child: const Text(
+                      'Already have an account?',
+                    ),
+                    onPressed: () {
+                      AutoRouter.of(context).replace(
+                        const SignInRoute(),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -171,6 +169,7 @@ class PasswordField extends ConsumerWidget {
             decoration: InputDecoration(
               labelText: 'Password',
               suffixIcon: IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 visualDensity: VisualDensity.compact,
                 onPressed: () {
                   ref.read(isPasswordVisibleProvider.notifier).isVisible =
@@ -279,8 +278,8 @@ class ConfirmPasswordField extends ConsumerWidget {
   }
 }
 
-class EmailField extends ConsumerWidget {
-  const EmailField({
+class SignUpEmailField extends ConsumerWidget {
+  const SignUpEmailField({
     super.key,
     this.isConfirm,
     this.text,
@@ -383,9 +382,11 @@ class AppElevatedButton extends StatelessWidget {
   const AppElevatedButton({
     required this.text,
     required this.onPressed,
+    this.isLoading = false,
     super.key,
   });
   final String text;
+  final bool isLoading;
   final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
@@ -401,12 +402,16 @@ class AppElevatedButton extends StatelessWidget {
         ),
       ),
       onPressed: onPressed,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
-      ),
+      child: isLoading
+          ? const CircularProgressIndicator(
+              color: Colors.white,
+            )
+          : Text(
+              text,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
     );
   }
 }

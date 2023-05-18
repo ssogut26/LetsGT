@@ -23,45 +23,64 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         key: _formKey,
         child: Padding(
           padding: AppPaddings.pagePadding,
-          child: ListView(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-              ),
-              const FlutterLogo(
-                size: 35,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-              ),
-              const EmailField(),
-              const PasswordField(),
-              AppElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    ref.read(signInProvider.notifier).signIn(ref, context);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill in the form'),
+          child: SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom == 0
+                  ? MediaQuery.of(context).size.height
+                  : MediaQuery.of(context).size.height * 0.75,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).viewInsets.bottom == 0
+                        ? MediaQuery.of(context).size.height * 0.1
+                        : MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  const FlutterLogo(
+                    size: 35,
+                  ),
+                  const Column(
+                    children: [
+                      SignInEmailField(),
+                      SignInPasswordField(),
+                    ],
+                  ),
+                  AppElevatedButton(
+                    isLoading: ref.watch(signInProvider).isLoading,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        ref.read(signInProvider.notifier).signIn(ref, context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill in the form'),
+                          ),
+                        );
+                      }
+                    },
+                    text: 'Sign In',
+                  ),
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          AutoRouter.of(context)
+                              .push(const ResetPasswordRoute());
+                        },
+                        child: const Text('Forgot Password?'),
                       ),
-                    );
-                  }
-                },
-                text: 'Sign In',
+                      TextButton(
+                        child: const Text('Already have an account?'),
+                        onPressed: () {
+                          AutoRouter.of(context).push(const SignUpRoute());
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Forgot Password?'),
-              ),
-              TextButton(
-                child: const Text('Already have an account?'),
-                onPressed: () {
-                  AutoRouter.of(context).push(const SignUpRoute());
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -69,8 +88,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   }
 }
 
-class EmailField extends ConsumerWidget {
-  const EmailField({
+class SignInEmailField extends ConsumerWidget {
+  const SignInEmailField({
     super.key,
     this.isConfirm,
     this.text,
@@ -121,8 +140,8 @@ class EmailField extends ConsumerWidget {
   }
 }
 
-class PasswordField extends ConsumerWidget {
-  const PasswordField({
+class SignInPasswordField extends ConsumerWidget {
+  const SignInPasswordField({
     super.key,
   });
 
@@ -168,7 +187,7 @@ class PasswordField extends ConsumerWidget {
             textAlign: TextAlign.center,
             keyboardType: TextInputType.visiblePassword,
             obscureText: !isVisible,
-            textInputAction: TextInputAction.next,
+            textInputAction: TextInputAction.done,
           ),
         ),
       ),

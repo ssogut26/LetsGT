@@ -8,6 +8,7 @@ class SignUpNotifier extends ChangeNotifier {
   String _phone = '';
   String _password = '';
   String _confirmPassword = '';
+  bool isLoading = false;
 
   String get name => _name;
   String get email => _email;
@@ -36,14 +37,21 @@ class SignUpNotifier extends ChangeNotifier {
   }
 
   Future<void> signUp(WidgetRef ref, BuildContext context) async {
-    await MyAuthService().signUpUser(
+    isLoading = true;
+    notifyListeners();
+    await MyAuthService()
+        .signUpUser(
       name,
       email,
       password,
       confirmPassword,
       ref: ref,
       context: context,
-    );
+    )
+        .whenComplete(() {
+      isLoading = false;
+      notifyListeners();
+    });
   }
 }
 
