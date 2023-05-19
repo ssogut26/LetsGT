@@ -50,17 +50,7 @@ class HomePage extends ConsumerWidget {
         const ActivitiesPage(),
         const ProfilePage(),
       ][selectedIndex ?? 0],
-      floatingActionButton: selectedIndex == 0
-          ? FloatingActionButton(
-              shape: const CircleBorder(),
-              mini: true,
-              onPressed: () {
-                context.router.push(CreateActivityRoute());
-              },
-              child: const Icon(Icons.add),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+     
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(

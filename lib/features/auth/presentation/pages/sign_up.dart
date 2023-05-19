@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
+import 'package:letsgt/features/auth/presentation/pages/confirm_reset_password.dart';
 import 'package:letsgt/features/auth/presentation/providers/sign_up_providers.dart';
 
 @RoutePage()
@@ -18,22 +19,34 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final signUp = ref.watch(signUpProvider);
     return Scaffold(
       body: Form(
         key: formKey,
         child: Padding(
           padding: AppPaddings.pagePadding,
           child: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
+            child: Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.08,
+                  resizableHeightBox(
+                    context,
+                    keyboardOpenHeight: 0.05,
                   ),
                   const FlutterLogo(
                     size: 35,
+                  ),
+                  resizableHeightBox(
+                    context,
+                    keyboardClosedHeight: 0.04,
+                  ),
+                  Text(
+                    'Create an account',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  resizableHeightBox(
+                    context,
+                    keyboardClosedHeight: 0.02,
                   ),
                   const Column(
                     children: [
@@ -44,8 +57,10 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ConfirmPasswordField(),
                     ],
                   ),
+                  resizableHeightBox(context, keyboardClosedHeight: 0.04),
                   AppElevatedButton(
-                    text: 'SIGN ME UP',
+                    isLoading: signUp.isLoading,
+                    text: 'SIGN UP',
                     onPressed: () {
                       try {
                         if (formKey.currentState?.validate() ?? false) {
@@ -61,6 +76,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       }
                     },
                   ),
+                  resizableHeightBox(context, keyboardClosedHeight: 0.03),
                   TextButton(
                     child: const Text(
                       'Already have an account?',
@@ -71,6 +87,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       );
                     },
                   ),
+                  resizableHeightBox(context, keyboardClosedHeight: 0.01),
                 ],
               ),
             ),
@@ -88,6 +105,8 @@ class NameField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signUp = ref.watch(signUpProvider);
+
     return Center(
       child: Padding(
         padding: AppPaddings.fieldAndButtonPadding,
@@ -109,7 +128,7 @@ class NameField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              ref.read(signUpProvider).setName = value;
+              signUp.setEmail = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.name,
@@ -159,6 +178,8 @@ class PasswordField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signUp = ref.watch(signUpProvider);
+
     final isVisible = ref.watch(isPasswordVisibleProvider);
     return Center(
       child: Padding(
@@ -195,7 +216,7 @@ class PasswordField extends ConsumerWidget {
             },
             onChanged: (String value) {
               ref.read(passwordProvider.notifier).password = value;
-              ref.read(signUpProvider).setPassword = value;
+              signUp.setPassword = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.visiblePassword,
@@ -229,6 +250,7 @@ class ConfirmPasswordField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signUp = ref.watch(signUpProvider);
     final isVisible = ref.watch(isConfirmPasswordVisibleProvider);
     return Center(
       child: Padding(
@@ -265,7 +287,7 @@ class ConfirmPasswordField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              ref.read(signUpProvider).setConfirmPassword = value;
+              signUp.setConfirmPassword = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.visiblePassword,
@@ -289,6 +311,8 @@ class SignUpEmailField extends ConsumerWidget {
   final String? text;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signUp = ref.watch(signUpProvider);
+
     return Center(
       child: Padding(
         padding: AppPaddings.fieldAndButtonPadding,
@@ -317,7 +341,7 @@ class SignUpEmailField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              ref.read(signUpProvider).setEmail = value;
+              signUp.setEmail = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.emailAddress,
@@ -337,6 +361,7 @@ class PhoneField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signUp = ref.watch(signUpProvider);
     return Center(
       child: Padding(
         padding: AppPaddings.fieldAndButtonPadding,
@@ -365,7 +390,7 @@ class PhoneField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              ref.read(signUpProvider).setPhone = value;
+              signUp.setPhone = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.phone,
@@ -403,8 +428,12 @@ class AppElevatedButton extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: isLoading
-          ? const CircularProgressIndicator(
-              color: Colors.white,
+          ? const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
             )
           : Text(
               text,

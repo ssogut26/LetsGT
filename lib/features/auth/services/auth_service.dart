@@ -83,7 +83,7 @@ class MyAuthService implements AmplifyAuthService {
         newPassword: newPassword,
         confirmationCode: confirmationCode,
       );
-
+      await ref?.read(appRouterProvider).replace(const SignInRoute());
       safePrint('Password reset complete: ${result.isPasswordReset}');
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context!).showSnackBar(

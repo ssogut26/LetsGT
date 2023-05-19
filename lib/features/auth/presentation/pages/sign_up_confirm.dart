@@ -55,6 +55,7 @@ class SignUpConfirmPage extends ConsumerWidget {
                 child: const Text('Resend code'),
               ),
               AppElevatedButton(
+                isLoading: ref.watch(signUpConfirmProvider).isLoading,
                 onPressed: () {
                   ref.read(signUpConfirmProvider.notifier).confirm(ref, email);
                 },

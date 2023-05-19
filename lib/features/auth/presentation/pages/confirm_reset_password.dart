@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:letsgt/core/usecases/extensions.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/auth/presentation/pages/reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
@@ -46,63 +47,74 @@ class ConfirmResetPasswordPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final email = ref.watch(resetPasswordProvider).email;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('Reset Password'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-          const FlutterLogo(
-            size: 35,
-          ),
-          Column(
+      body: SingleChildScrollView(
+        child: Expanded(
+          child: Column(
             children: [
-              ResetEmailField(
-                isConfirm: true,
-                text: email,
+              resizableHeightBox(context),
+              const FlutterLogo(
+                size: 35,
               ),
-              Padding(
-                padding: AppPaddings.fieldAndButtonPadding,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Confirmation Code',
-                    ),
-                    onChanged: (value) {
-                      ref.read(resetPasswordConfirmProvider.notifier).setCode =
-                          value;
-                    },
+              resizableHeightBox(context),
+              Column(
+                children: [
+                  ResetEmailField(
+                    isConfirm: true,
+                    text: email,
                   ),
-                ),
+                  Padding(
+                    padding: AppPaddings.fieldAndButtonPadding,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Confirmation Code',
+                        ),
+                        textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          ref
+                              .read(resetPasswordConfirmProvider.notifier)
+                              .setCode = value;
+                        },
+                      ),
+                    ),
+                  ),
+                  const ResetPasswordField(),
+                ],
               ),
-              const ResetPasswordField(),
+              resizableHeightBox(context),
+              AppElevatedButton(
+                onPressed: () {
+                  ref
+                      .read(resetPasswordConfirmProvider.notifier)
+                      .confirmResetPassword(ref, email);
+                },
+                text: 'Confirm',
+              ),
+              resizableHeightBox(context),
             ],
           ),
-          TextButton(
-            onPressed: () {
-              ref.read(resetPasswordConfirmProvider.notifier).resendCode(email);
-            },
-            child: const Text('Resend code'),
-          ),
-          AppElevatedButton(
-            onPressed: () {
-              ref
-                  .read(resetPasswordConfirmProvider.notifier)
-                  .confirmResetPassword(ref, email);
-            },
-            text: 'Confirm',
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+AnimatedContainer resizableHeightBox(
+  BuildContext context, {
+  num? keyboardClosedHeight,
+  num? keyboardOpenHeight,
+}) {
+  return AnimatedContainer(
+    duration: const Duration(milliseconds: 200),
+    height: Layout(context).isKeyboardOpen
+        ? Layout(context).height * (keyboardOpenHeight ?? 0.02)
+        : Layout(context).height * (keyboardClosedHeight ?? 0.1),
+  );
 }
 
 class ResetPasswordField extends ConsumerWidget {
