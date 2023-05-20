@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/amplifyconfiguration.dart';
 import 'package:letsgt/app.dart';
+import 'package:letsgt/models/ModelProvider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> main() async {
@@ -23,8 +25,13 @@ Future<void> main() async {
 
 Future<void> _configureAmplify() async {
   try {
-    final auth = AmplifyAuthCognito();
-    await Amplify.addPlugin(auth);
+    // Add Amplify Plugins
+    await Amplify.addPlugins([
+      AmplifyAuthCognito(),
+      AmplifyAPI(
+        modelProvider: ModelProvider.instance,
+      )
+    ]);
 
     // call Amplify.configure to use the initialized categories in your app
     await Amplify.configure(amplifyconfig);

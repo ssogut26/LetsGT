@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/app.dart';
 import 'package:letsgt/config/routes/routes.dart';
+import 'package:letsgt/models/ModelProvider.dart';
 
 abstract class AmplifyAuthService {
   Future<void> signInUser(
@@ -31,6 +33,11 @@ abstract class AmplifyAuthService {
   Future<void> signOut();
   Future<void> resetPassword({
     String? username,
+  });
+  Future<void> saveUserData({
+    required String name,
+    required String email,
+    required String phoneNumber,
   });
 }
 
@@ -310,6 +317,96 @@ class MyAuthService implements AmplifyAuthService {
       await _handleSignUpResult(result, ref, context);
     } on AuthException catch (e) {
       safePrint('Error confirming user: ${e.message}');
+    }
+  }
+
+  Future<void> fetchCurrentUserAttributes() async {
+    try {
+      final result = await Amplify.Auth.fetchUserAttributes();
+      for (final element in result) {
+        safePrint('key: ${element.userAttributeKey}; value: ${element.value}');
+      }
+    } on AuthException catch (e) {
+      safePrint('Error fetching user attributes: ${e.message}');
+    }
+  }
+
+  @override
+  Future<void> saveUserData({
+    required String name,
+    required String email,
+    required String phoneNumber,
+  }) async {
+    try {
+      final userData = UserModel(
+        userName: name,
+        id: '1',
+        friends: FriendList(),
+        location: '',
+        userStatus: 'Active',
+      );
+      final request = ModelMutations.create(
+        userData,
+      );
+
+      final response = await Amplify.API.mutate(request: request).response;
+      final createdUserData = response.data;
+      if (createdUserData != null) {
+        safePrint('User data saved successfully');
+      } else {
+        safePrint('User data not saved');
+      }
+    } on ApiException catch (e) {
+      safePrint('Error saving user data: ${e.message}');
+    }
+  }
+
+  Future<void> createActivity({
+    required String activityName,
+    required String activityDescription,
+    required String selectedDate,
+    required String selectedLocation,
+  }) async {
+    try {
+      final activityData = ActivityModel(
+        id: '8',
+        activityDescription: activityDescription,
+        activityName: activityName,
+        selectedDate: selectedDate,
+        selectedLocation: selectedLocation,
+      );
+      final request = ModelMutations.create(
+        activityData,
+      );
+
+      final response = await Amplify.API.mutate(request: request).response;
+
+      final createdActivityData = response.data;
+
+      if (createdActivityData == null) {
+        safePrint('errors: ${response.errors}');
+        return;
+      }
+      safePrint('Mutation result: ${createdActivityData.activityName}');
+    } on ApiException catch (e) {
+      safePrint('Error creating activity: ${e.message}');
+    }
+  }
+
+  Future<List<ActivityModel?>> fetchActivities() async {
+    try {
+      final request = ModelQueries.list(ActivityModel.classType);
+      final response = await Amplify.API.query(request: request).response;
+
+      final activities = response.data?.items;
+      if (activities == null) {
+        safePrint('errors: ${response.errors}');
+        return const [];
+      }
+      return activities;
+    } on ApiException catch (e) {
+      safePrint('Query failed: $e');
+      return const [];
     }
   }
 }

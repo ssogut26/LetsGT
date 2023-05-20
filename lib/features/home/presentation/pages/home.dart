@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/activities/presentation/pages/activities.dart';
 import 'package:letsgt/features/messages/presentation/pages/messages.dart';
@@ -50,7 +49,6 @@ class HomePage extends ConsumerWidget {
         const ActivitiesPage(),
         const ProfilePage(),
       ][selectedIndex ?? 0],
-     
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(

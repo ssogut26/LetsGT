@@ -5,6 +5,60 @@ import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/auth/presentation/pages/confirm_reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
+import 'package:letsgt/features/auth/services/auth_service.dart';
+
+class ActivityNotifier extends ChangeNotifier {
+  String? _activityName;
+  String? _activityDescription;
+  String? _selectedLocation;
+  String? _selectedDate;
+  String _selectedTime = '12:00';
+
+  String? get activityName => _activityName;
+  String? get activityDescription => _activityDescription;
+  String? get selectedLocation => _selectedLocation;
+  String? get selectedDate => _selectedDate;
+  String get selectedTime => _selectedTime;
+
+  set activityName(String? value) {
+    _activityName = value;
+    notifyListeners();
+  }
+
+  set activityDescription(String? value) {
+    _activityDescription = value;
+    notifyListeners();
+  }
+
+  set selectedLocation(String? value) {
+    _selectedLocation = value;
+    notifyListeners();
+  }
+
+  set selectedDate(String? value) {
+    _selectedDate = value;
+    notifyListeners();
+  }
+
+  set selectedTime(String value) {
+    _selectedTime = value;
+    notifyListeners();
+  }
+
+  Future<void> createActivity() async {
+    await MyAuthService().createActivity(
+      activityName: activityName ?? '',
+      activityDescription: activityDescription ?? '',
+      selectedLocation: selectedLocation ?? '',
+      selectedDate: selectedDate ?? '',
+    );
+    notifyListeners();
+  }
+}
+
+final activityProvider = ChangeNotifierProvider(
+  (ref) => ActivityNotifier(),
+);
 
 @RoutePage()
 class CreateActivityPage extends ConsumerStatefulWidget {
@@ -19,10 +73,10 @@ class CreateActivityPage extends ConsumerStatefulWidget {
 class _SignInPageState extends ConsumerState<CreateActivityPage> {
   final _formKey = GlobalKey<FormState>();
   List<String> participants = [];
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
+
   @override
   Widget build(BuildContext context) {
+    final activityHandler = ref.watch(activityProvider);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -57,6 +111,9 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                             }
                             return null;
                           },
+                          onChanged: (value) {
+                            activityHandler.activityName = value;
+                          },
                         ),
                       ),
                       Padding(
@@ -70,6 +127,9 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                               return 'Please enter some text';
                             }
                             return null;
+                          },
+                          onChanged: (value) {
+                            activityHandler.activityDescription = value;
                           },
                         ),
                       ),
@@ -111,12 +171,12 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                         padding: AppPaddings.fieldAndButtonPadding,
                         child: ListTile(
                           title: Text(
-                            selectedDate.toString() == 'null'
+                            activityHandler.selectedDate.toString() == 'null'
                                 ? 'Select Date'
-                                : '${'Date: ${selectedDate.toString().substring(
+                                : '${'Date: ${activityHandler.selectedDate.toString().substring(
                                       0,
                                       10,
-                                    )} ${selectedTime?.format(context) ?? ''}'} ',
+                                    )} ${activityHandler.selectedTime}'} ',
                           ),
                           trailing: IconButton(
                             onPressed: () async {
@@ -126,14 +186,18 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                                 firstDate: DateTime.now(),
                                 lastDate: DateTime(2025),
                               ).whenComplete(() async {
-                                selectedTime = await showTimePicker(
+                                final selectedTime = await showTimePicker(
                                   context: context,
                                   initialTime: TimeOfDay.now(),
                                 );
+                                setState(() {
+                                  activityHandler.selectedTime =
+                                      selectedTime?.format(context) ?? '';
+                                });
                               });
                               setState(() {
-                                selectedDate = date;
-                                selectedDate?.toUtc();
+                                activityHandler.selectedDate =
+                                    date?.toString() ?? '';
                               });
                             },
                             icon: const Icon(Icons.calendar_today),
@@ -184,7 +248,13 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                       ),
                       AppElevatedButton(
                         text: 'CREATE ACTIVITY',
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await activityHandler.createActivity().whenComplete(
+                                  () async => AutoRouter.of(context).pop(),
+                                );
+                          }
+                        },
                       ),
                       resizableHeightBox(
                         context,
