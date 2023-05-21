@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
@@ -366,14 +368,17 @@ class MyAuthService implements AmplifyAuthService {
     required String activityDescription,
     required String selectedDate,
     required String selectedLocation,
+    String? createdBy,
   }) async {
     try {
+      final randomId = Random().nextInt(10000);
       final activityData = ActivityModel(
-        id: '8',
+        id: randomId.toString(),
         activityDescription: activityDescription,
         activityName: activityName,
         selectedDate: selectedDate,
         selectedLocation: selectedLocation,
+        
       );
       final request = ModelMutations.create(
         activityData,
@@ -403,6 +408,13 @@ class MyAuthService implements AmplifyAuthService {
         safePrint('errors: ${response.errors}');
         return const [];
       }
+      activities.sort(
+        (a, b) =>
+            a!.createdAt?.compareTo(
+              b!.createdAt!,
+            ) ??
+            0,
+      );
       return activities;
     } on ApiException catch (e) {
       safePrint('Query failed: $e');

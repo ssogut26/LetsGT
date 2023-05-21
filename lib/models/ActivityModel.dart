@@ -32,6 +32,7 @@ class ActivityModel extends Model {
     required String selectedDate,
     String? id,
     String? participants,
+    String? createdBy,
   }) {
     return ActivityModel._internal(
       id: id == null ? UUID.getUUID() : id,
@@ -40,6 +41,7 @@ class ActivityModel extends Model {
       selectedLocation: selectedLocation,
       selectedDate: selectedDate,
       participants: participants,
+      createdBy: createdBy,
     );
   }
   const ActivityModel._internal({
@@ -49,6 +51,7 @@ class ActivityModel extends Model {
     required String? selectedLocation,
     required String? selectedDate,
     String? participants,
+    String? createdBy,
     TemporalDateTime? createdAt,
     TemporalDateTime? updatedAt,
   })  : _activityName = activityName,
@@ -56,16 +59,18 @@ class ActivityModel extends Model {
         _selectedLocation = selectedLocation,
         _selectedDate = selectedDate,
         _participants = participants,
+        _createdBy = createdBy,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
   ActivityModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
-        _activityName = json['activityName'] as String?,
-        _activityDescription = json['activityDescription'] as String?,
-        _selectedLocation = json['selectedLocation'] as String?,
-        _selectedDate = json['selectedDate'] as String?,
+        _activityName = json['activityName'] as String,
+        _activityDescription = json['activityDescription'] as String,
+        _selectedLocation = json['selectedLocation'] as String,
+        _selectedDate = json['selectedDate'] as String,
         _participants = json['participants'] as String?,
+        _createdBy = json['createdBy'] as String?,
         _createdAt = json['createdAt'] != null
             ? TemporalDateTime.fromString(json['createdAt'] as String)
             : null,
@@ -79,6 +84,7 @@ class ActivityModel extends Model {
   final String? _selectedLocation;
   final String? _selectedDate;
   final String? _participants;
+  final String? _createdBy;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -153,6 +159,10 @@ class ActivityModel extends Model {
     return _participants;
   }
 
+  String? get createdBy {
+    return _createdBy;
+  }
+
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -174,7 +184,8 @@ class ActivityModel extends Model {
         _activityDescription == other._activityDescription &&
         _selectedLocation == other._selectedLocation &&
         _selectedDate == other._selectedDate &&
-        _participants == other._participants;
+        _participants == other._participants &&
+        _createdBy == other._createdBy;
   }
 
   @override
@@ -191,6 +202,7 @@ class ActivityModel extends Model {
     buffer.write('selectedLocation=' + '$_selectedLocation' + ', ');
     buffer.write('selectedDate=' + '$_selectedDate' + ', ');
     buffer.write('participants=' + '$_participants' + ', ');
+    buffer.write('createdBy=' + '$_createdBy' + ', ');
     buffer.write(
       'createdAt=' +
           (_createdAt != null ? _createdAt!.format() : 'null') +
@@ -210,6 +222,7 @@ class ActivityModel extends Model {
     String? selectedLocation,
     String? selectedDate,
     String? participants,
+    String? createdBy,
   }) {
     return ActivityModel._internal(
       id: id,
@@ -218,6 +231,7 @@ class ActivityModel extends Model {
       selectedLocation: selectedLocation ?? this.selectedLocation,
       selectedDate: selectedDate ?? this.selectedDate,
       participants: participants ?? this.participants,
+      createdBy: createdBy ?? this.createdBy,
     );
   }
 
@@ -228,6 +242,7 @@ class ActivityModel extends Model {
         'selectedLocation': _selectedLocation,
         'selectedDate': _selectedDate,
         'participants': _participants,
+        'createdBy': _createdBy,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
@@ -239,6 +254,7 @@ class ActivityModel extends Model {
         'selectedLocation': _selectedLocation,
         'selectedDate': _selectedDate,
         'participants': _participants,
+        'createdBy': _createdBy,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
       };
@@ -253,6 +269,7 @@ class ActivityModel extends Model {
       QueryField(fieldName: 'selectedLocation');
   static final QueryField SELECTEDDATE = QueryField(fieldName: 'selectedDate');
   static final QueryField PARTICIPANTS = QueryField(fieldName: 'participants');
+  static final QueryField CREATEDBY = QueryField(fieldName: 'createdBy');
   static ModelSchema schema = Model.defineSchema(
     define: (ModelSchemaDefinition modelSchemaDefinition) {
       modelSchemaDefinition.name = 'ActivityModel';
@@ -307,6 +324,14 @@ class ActivityModel extends Model {
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
           key: ActivityModel.PARTICIPANTS,
+          isRequired: false,
+          ofType: ModelFieldType(ModelFieldTypeEnum.string),
+        ),
+      );
+
+      modelSchemaDefinition.addField(
+        ModelFieldDefinition.field(
+          key: ActivityModel.CREATEDBY,
           isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),

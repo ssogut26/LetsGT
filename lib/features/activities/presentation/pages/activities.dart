@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/features/auth/services/auth_service.dart';
-import 'package:letsgt/models/ModelProvider.dart';
+import 'package:letsgt/models/ActivityModel.dart';
 
-final activitiesProvider = FutureProvider.autoDispose(
+final activitiesProvider = FutureProvider<List<ActivityModel?>>(
   (
     ref,
   ) async {
-    await MyAuthService().fetchActivities();
+    final r = await MyAuthService().fetchActivities();
+    print(r);
+    return r;
   },
 );
 
@@ -32,34 +34,37 @@ class ActivitiesPage extends ConsumerWidget {
         error: (error, stackTrace) => const Center(
           child: Text('Error'),
         ),
-        data: (data) {
-          print(data);
-          if (data is ActivityModel) {
-            return ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const CircleAvatar(),
-                  title: Text(data.activityName),
-                  subtitle: const Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 4,
-                        backgroundColor: Colors.red,
-                      ),
-                      Text(
-                        '',
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          } else {
-            return const Center(
-              child: Text('No data'),
-            );
-          }
+        data: (List<ActivityModel?> data) {
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final activityDetails = data[index];
+              return ListTile(
+                leading: const CircleAvatar(),
+                title: Text(activityDetails?.activityName ?? ''),
+                subtitle: Row(
+                  children: [
+                    const CircleAvatar(
+                      radius: 4,
+                      backgroundColor: Colors.red,
+                    ),
+                    Text(
+                      activityDetails?.selectedLocation ?? 'ss',
+                    ),
+                    Text(
+                      activityDetails?.activityDescription ?? 'ss',
+                    ),
+                    Text(
+                      activityDetails?.selectedLocation ?? 'ss',
+                    ),
+                    Text(
+                      activityDetails?.selectedDate ?? 'ss',
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
         },
         loading: () => const Center(
           child: CircularProgressIndicator(),

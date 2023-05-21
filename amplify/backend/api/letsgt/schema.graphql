@@ -5,6 +5,7 @@ type ActivityModel @model @auth(rules: [{allow: private}]) {
   selectedLocation: String!
   selectedDate: String!
   participants: String
+  createdBy: String
 }
 
 type FriendList {

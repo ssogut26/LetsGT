@@ -17,6 +17,9 @@
       },
       "api": {
         "letsgt": {}
+      },
+      "storage": {
+        "s3letsgtstorage773682b8": {}
       }
     }
   }
