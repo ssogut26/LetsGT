@@ -253,7 +253,13 @@ class MyAuthService implements AmplifyAuthService {
           userAttributes: userAttributes,
         ),
       );
-      await _handleSignUpResult(result, ref, context);
+      await _handleSignUpResult(result, ref, context).whenComplete(
+        () async => saveUserData(
+          name: name,
+          email: email,
+          phoneNumber: phoneNumber ?? '',
+        ),
+      );
     } on AuthException catch (e) {
       safePrint('Error signing up user: ${e.message}');
     }
@@ -322,17 +328,6 @@ class MyAuthService implements AmplifyAuthService {
     }
   }
 
-  Future<void> fetchCurrentUserAttributes() async {
-    try {
-      final result = await Amplify.Auth.fetchUserAttributes();
-      for (final element in result) {
-        safePrint('key: ${element.userAttributeKey}; value: ${element.value}');
-      }
-    } on AuthException catch (e) {
-      safePrint('Error fetching user attributes: ${e.message}');
-    }
-  }
-
   @override
   Future<void> saveUserData({
     required String name,
@@ -343,7 +338,6 @@ class MyAuthService implements AmplifyAuthService {
       final userData = UserModel(
         userName: name,
         id: '1',
-        friends: FriendList(),
         location: '',
         userStatus: 'Active',
       );
@@ -366,11 +360,15 @@ class MyAuthService implements AmplifyAuthService {
   Future<void> createActivity({
     required String activityName,
     required String activityDescription,
-    required String selectedDate,
+    required TemporalDateTime selectedDate,
     required String selectedLocation,
     String? createdBy,
   }) async {
     try {
+      final attributes = await Amplify.Auth.fetchUserAttributes();
+      final userName = attributes
+          .firstWhere((element) => element.userAttributeKey.key == 'name')
+          .value;
       final randomId = Random().nextInt(10000);
       final activityData = ActivityModel(
         id: randomId.toString(),
@@ -378,7 +376,8 @@ class MyAuthService implements AmplifyAuthService {
         activityName: activityName,
         selectedDate: selectedDate,
         selectedLocation: selectedLocation,
-        
+        participants: const ['Selcuk'],
+        createdBy: userName,
       );
       final request = ModelMutations.create(
         activityData,
@@ -419,6 +418,28 @@ class MyAuthService implements AmplifyAuthService {
     } on ApiException catch (e) {
       safePrint('Query failed: $e');
       return const [];
+    }
+  }
+
+  Future<ActivityModel?> getActivityDetails(
+    ActivityModel queriedActivity,
+  ) async {
+    try {
+      final request = ModelQueries.get(
+        ActivityModel.classType,
+        queriedActivity.modelIdentifier,
+      );
+
+      final response = await Amplify.API.query(request: request).response;
+
+      final activity = response.data;
+      if (activity == null) {
+        safePrint('errors: ${response.errors}');
+      }
+      return activity;
+    } on ApiException catch (e) {
+      safePrint('Query failed: $e');
+      return null;
     }
   }
 }

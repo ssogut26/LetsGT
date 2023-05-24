@@ -2,6 +2,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:letsgt/features/activities/presentation/pages/activities.dart';
+import 'package:letsgt/features/activities/presentation/pages/activity_detail.dart';
 import 'package:letsgt/features/auth/presentation/pages/confirm_reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_in.dart';
@@ -69,6 +70,12 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: ProfileRoute.page,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
+        AutoRoute(
+          page: ActivityDetailRoute.page,
           guards: [
             AuthGuard(),
           ],

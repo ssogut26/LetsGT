@@ -1,3 +1,4 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,13 +12,11 @@ import 'package:letsgt/features/auth/services/auth_service.dart';
 class ActivityNotifier extends ChangeNotifier {
   String? _activityName;
   String? _activityDescription;
-  String? _selectedDate;
-  String _selectedTime = '12:00';
+  TemporalDateTime? _selectedDate;
 
   String? get activityName => _activityName;
   String? get activityDescription => _activityDescription;
-  String? get selectedDate => _selectedDate;
-  String get selectedTime => _selectedTime;
+  TemporalDateTime? get selectedDate => _selectedDate;
 
   set activityName(String? value) {
     _activityName = value;
@@ -29,13 +28,8 @@ class ActivityNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  set selectedDate(String? value) {
+  set selectedDate(TemporalDateTime? value) {
     _selectedDate = value;
-    notifyListeners();
-  }
-
-  set selectedTime(String value) {
-    _selectedTime = value;
     notifyListeners();
   }
 
@@ -44,7 +38,7 @@ class ActivityNotifier extends ChangeNotifier {
       activityName: activityName ?? '',
       activityDescription: activityDescription ?? '',
       selectedLocation: selectedLocation,
-      selectedDate: selectedDate ?? '',
+      selectedDate: selectedDate ?? TemporalDateTime.now(),
     );
     notifyListeners();
   }
@@ -67,13 +61,14 @@ class CreateActivityPage extends ConsumerStatefulWidget {
 class _SignInPageState extends ConsumerState<CreateActivityPage> {
   final _formKey = GlobalKey<FormState>();
   List<String> participants = [];
-  String? formattedDateTime;
+  TemporalDateTime? formattedDateTime;
+  String? showSelectedTime;
 
   Future<void> _selectDateTime(BuildContext context) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
 
@@ -82,8 +77,6 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
       initialTime: TimeOfDay.now(),
     );
 
-    print(selectedTime);
-
     final selectedDateTime = DateTime(
       picked!.year,
       picked.month,
@@ -91,9 +84,13 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
       selectedTime!.hour,
       selectedTime.minute,
     );
+    final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
 
-    formattedDateTime = DateFormat('yyyy-MM-dd HH:mm').format(selectedDateTime);
-    setState(() {});
+    final format = dateFormat.format(selectedDateTime);
+    showSelectedTime = format;
+    formattedDateTime = TemporalDateTime.fromString(
+      dateFormat.parse(format, true).toIso8601String(),
+    );
   }
 
   @override
@@ -188,19 +185,20 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                         ),
                       ),
                     ),
+
                     Padding(
                       padding: AppPaddings.fieldAndButtonPadding,
                       child: ListTile(
                         title: Text(
                           activityHandler.selectedDate.toString() == 'null'
                               ? 'Select Date'
-                              : 'Date: ${activityHandler.selectedDate}',
+                              : 'Date: $showSelectedTime',
                         ),
                         trailing: IconButton(
                           onPressed: () async {
                             await _selectDateTime(context).whenComplete(
                               () => activityHandler.selectedDate =
-                                  formattedDateTime ?? '',
+                                  formattedDateTime,
                             );
                           },
                           icon: const Icon(Icons.calendar_today),
@@ -259,8 +257,10 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                                 widget.locationInfo ?? '',
                               )
                               .whenComplete(
-                                () async => AutoRouter.of(context).replace(
-                                  const ActivitiesRoute(),
+                                () async =>
+                                    AutoRouter.of(context).pushAndPopUntil(
+                                  const HomeRoute(),
+                                  predicate: (route) => false,
                                 ),
                               );
                         }

@@ -22,20 +22,18 @@
 import 'package:amplify_core/amplify_core.dart';
 import 'ActivityModel.dart';
 import 'UserModel.dart';
-import 'FriendList.dart';
 
 export 'ActivityModel.dart';
-export 'FriendList.dart';
 export 'UserModel.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "228f7eb3e8ad3d1213daec7d5c785351";
+  String version = "75d32d46e235aa66b7a604c886ce1bd6";
   @override
   List<ModelSchema> modelSchemas = [ActivityModel.schema, UserModel.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
-  List<ModelSchema> customTypeSchemas = [FriendList.schema];
+  List<ModelSchema> customTypeSchemas = [];
 
   static ModelProvider get instance => _instance;
   

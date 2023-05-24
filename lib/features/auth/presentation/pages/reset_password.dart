@@ -48,55 +48,53 @@ class ResetPasswordPage extends ConsumerWidget {
     final resetPassword = ref.watch(resetPasswordProvider);
     return Scaffold(
       body: SingleChildScrollView(
-        child: Expanded(
-          child: Column(
-            children: [
-              resizableHeightBox(
-                context,
-                keyboardClosedHeight: 0.2,
-              ),
-              const FlutterLogo(
-                size: 35,
-              ),
-              resizableHeightBox(context),
-              const Column(
-                children: [
-                  Text('Forgot Password'),
-                  Text('Enter your email to reset your password'),
-                ],
-              ),
-              resizableHeightBox(context),
-              Column(
-                children: [
-                  ResetEmailField(
-                    isConfirm: false,
-                    text: resetPassword.email,
-                  ),
-                  resizableHeightBox(context),
-                  AppElevatedButton(
-                    isLoading: resetPassword.isLoading,
-                    text: 'SEND',
-                    onPressed: () {
-                      ref
-                          .read(resetPasswordProvider.notifier)
-                          .forgotPassword(ref, context);
-                    },
-                  ),
-                ],
-              ),
-              resizableHeightBox(context),
-              TextButton(
-                onPressed: () {
-                  AutoRouter.of(context).replace(const SignInRoute());
-                },
-                child: const Text('Back to Sign In'),
-              ),
-              resizableHeightBox(
-                context,
-                keyboardClosedHeight: 0.05,
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            resizableHeightBox(
+              context,
+              keyboardClosedHeight: 0.2,
+            ),
+            const FlutterLogo(
+              size: 35,
+            ),
+            resizableHeightBox(context),
+            const Column(
+              children: [
+                Text('Forgot Password'),
+                Text('Enter your email to reset your password'),
+              ],
+            ),
+            resizableHeightBox(context),
+            Column(
+              children: [
+                ResetEmailField(
+                  isConfirm: false,
+                  text: resetPassword.email,
+                ),
+                resizableHeightBox(context),
+                AppElevatedButton(
+                  isLoading: resetPassword.isLoading,
+                  text: 'SEND',
+                  onPressed: () {
+                    ref
+                        .read(resetPasswordProvider.notifier)
+                        .forgotPassword(ref, context);
+                  },
+                ),
+              ],
+            ),
+            resizableHeightBox(context),
+            TextButton(
+              onPressed: () {
+                AutoRouter.of(context).replace(const SignInRoute());
+              },
+              child: const Text('Back to Sign In'),
+            ),
+            resizableHeightBox(
+              context,
+              keyboardClosedHeight: 0.05,
+            ),
+          ],
         ),
       ),
     );

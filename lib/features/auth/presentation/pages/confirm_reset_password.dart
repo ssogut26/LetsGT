@@ -52,52 +52,50 @@ class ConfirmResetPasswordPage extends ConsumerWidget {
         title: const Text('Reset Password'),
       ),
       body: SingleChildScrollView(
-        child: Expanded(
-          child: Column(
-            children: [
-              resizableHeightBox(context),
-              const FlutterLogo(
-                size: 35,
-              ),
-              resizableHeightBox(context),
-              Column(
-                children: [
-                  ResetEmailField(
-                    isConfirm: true,
-                    text: email,
-                  ),
-                  Padding(
-                    padding: AppPaddings.fieldAndButtonPadding,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Confirmation Code',
-                        ),
-                        textAlign: TextAlign.center,
-                        onChanged: (value) {
-                          ref
-                              .read(resetPasswordConfirmProvider.notifier)
-                              .setCode = value;
-                        },
+        child: Column(
+          children: [
+            resizableHeightBox(context),
+            const FlutterLogo(
+              size: 35,
+            ),
+            resizableHeightBox(context),
+            Column(
+              children: [
+                ResetEmailField(
+                  isConfirm: true,
+                  text: email,
+                ),
+                Padding(
+                  padding: AppPaddings.fieldAndButtonPadding,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Confirmation Code',
                       ),
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        ref
+                            .read(resetPasswordConfirmProvider.notifier)
+                            .setCode = value;
+                      },
                     ),
                   ),
-                  const ResetPasswordField(),
-                ],
-              ),
-              resizableHeightBox(context),
-              AppElevatedButton(
-                onPressed: () {
-                  ref
-                      .read(resetPasswordConfirmProvider.notifier)
-                      .confirmResetPassword(ref, email);
-                },
-                text: 'Confirm',
-              ),
-              resizableHeightBox(context),
-            ],
-          ),
+                ),
+                const ResetPasswordField(),
+              ],
+            ),
+            resizableHeightBox(context),
+            AppElevatedButton(
+              onPressed: () {
+                ref
+                    .read(resetPasswordConfirmProvider.notifier)
+                    .confirmResetPassword(ref, email);
+              },
+              text: 'Confirm',
+            ),
+            resizableHeightBox(context),
+          ],
         ),
       ),
     );

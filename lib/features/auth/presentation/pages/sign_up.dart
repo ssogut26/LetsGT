@@ -26,70 +26,68 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         child: Padding(
           padding: AppPaddings.pagePadding,
           child: SingleChildScrollView(
-            child: Expanded(
-              child: Column(
-                children: [
-                  resizableHeightBox(
-                    context,
-                    keyboardOpenHeight: 0.05,
-                  ),
-                  const FlutterLogo(
-                    size: 35,
-                  ),
-                  resizableHeightBox(
-                    context,
-                    keyboardClosedHeight: 0.04,
-                  ),
-                  Text(
-                    'Create an account',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  resizableHeightBox(
-                    context,
-                    keyboardClosedHeight: 0.02,
-                  ),
-                  const Column(
-                    children: [
-                      NameField(),
-                      SignUpEmailField(),
-                      PhoneField(),
-                      PasswordField(),
-                      ConfirmPasswordField(),
-                    ],
-                  ),
-                  resizableHeightBox(context, keyboardClosedHeight: 0.04),
-                  AppElevatedButton(
-                    isLoading: signUp.isLoading,
-                    text: 'SIGN UP',
-                    onPressed: () {
-                      try {
-                        if (formKey.currentState?.validate() ?? false) {
-                          formKey.currentState?.save();
-                          ref.read(signUpProvider).signUp(ref, context);
-                        }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in the form'),
-                          ),
-                        );
+            child: Column(
+              children: [
+                resizableHeightBox(
+                  context,
+                  keyboardOpenHeight: 0.05,
+                ),
+                const FlutterLogo(
+                  size: 35,
+                ),
+                resizableHeightBox(
+                  context,
+                  keyboardClosedHeight: 0.04,
+                ),
+                Text(
+                  'Create an account',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                resizableHeightBox(
+                  context,
+                  keyboardClosedHeight: 0.02,
+                ),
+                const Column(
+                  children: [
+                    NameField(),
+                    SignUpEmailField(),
+                    PhoneField(),
+                    PasswordField(),
+                    ConfirmPasswordField(),
+                  ],
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.04),
+                AppElevatedButton(
+                  isLoading: signUp.isLoading,
+                  text: 'SIGN UP',
+                  onPressed: () {
+                    try {
+                      if (formKey.currentState?.validate() ?? false) {
+                        formKey.currentState?.save();
+                        ref.read(signUpProvider).signUp(ref, context);
                       }
-                    },
-                  ),
-                  resizableHeightBox(context, keyboardClosedHeight: 0.03),
-                  TextButton(
-                    child: const Text(
-                      'Already have an account?',
-                    ),
-                    onPressed: () {
-                      AutoRouter.of(context).replace(
-                        const SignInRoute(),
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in the form'),
+                        ),
                       );
-                    },
+                    }
+                  },
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.03),
+                TextButton(
+                  child: const Text(
+                    'Already have an account?',
                   ),
-                  resizableHeightBox(context, keyboardClosedHeight: 0.01),
-                ],
-              ),
+                  onPressed: () {
+                    AutoRouter.of(context).replace(
+                      const SignInRoute(),
+                    );
+                  },
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.01),
+              ],
             ),
           ),
         ),
@@ -128,7 +126,7 @@ class NameField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              signUp.setEmail = value;
+              signUp.setName = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.name,

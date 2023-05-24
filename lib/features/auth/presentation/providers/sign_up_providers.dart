@@ -45,10 +45,11 @@ class SignUpNotifier extends ChangeNotifier {
       email,
       password,
       confirmPassword,
+      phoneNumber: phone,
       ref: ref,
       context: context,
     )
-        .whenComplete(() {
+        .then((_) {
       isLoading = false;
       notifyListeners();
     });

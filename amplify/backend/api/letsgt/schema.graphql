@@ -1,16 +1,11 @@
-type ActivityModel @model @auth(rules: [{allow: private}]) {
+type ActivityModel @model @auth(rules: [{allow: private, provider: iam}]) {
   id: ID!
-  activityName: String!
-  activityDescription: String!
-  selectedLocation: String!
-  selectedDate: String!
-  participants: String
+  activityName: String
+  activityDescription: String
+  selectedLocation: String
+  selectedDate: AWSDateTime
+  participants: [String]
   createdBy: String
-}
-
-type FriendList {
-  friendName: String
-  friendStatus: String
 }
 
 type UserModel @model @auth(rules: [{allow: private}]) {
@@ -18,6 +13,5 @@ type UserModel @model @auth(rules: [{allow: private}]) {
   userName: String
   location: String
   userStatus: String
-  friends: FriendList
 }
  

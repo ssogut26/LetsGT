@@ -9,11 +9,14 @@ final activitiesProvider = FutureProvider<List<ActivityModel?>>(
   (
     ref,
   ) async {
-    final r = await MyAuthService().fetchActivities();
-    print(r);
-    return r;
+    final result = await MyAuthService().fetchActivities();
+    return result;
   },
 );
+
+final activityIdProvider = StateProvider<String>((ref) {
+  return '';
+});
 
 @RoutePage()
 class ActivitiesPage extends ConsumerWidget {
@@ -39,28 +42,30 @@ class ActivitiesPage extends ConsumerWidget {
             itemCount: data.length,
             itemBuilder: (context, index) {
               final activityDetails = data[index];
-              return ListTile(
-                leading: const CircleAvatar(),
-                title: Text(activityDetails?.activityName ?? ''),
-                subtitle: Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 4,
-                      backgroundColor: Colors.red,
-                    ),
-                    Text(
-                      activityDetails?.selectedLocation ?? 'ss',
-                    ),
-                    Text(
-                      activityDetails?.activityDescription ?? 'ss',
-                    ),
-                    Text(
-                      activityDetails?.selectedLocation ?? 'ss',
-                    ),
-                    Text(
-                      activityDetails?.selectedDate ?? 'ss',
-                    ),
-                  ],
+              return InkWell(
+                onTap: () {
+                  ref.read(activityIdProvider.notifier).state =
+                      activityDetails?.id ?? '';
+                  context.router.push(
+                    const ActivityDetailRoute(),
+                  );
+                },
+                child: ListTile(
+                  leading: const CircleAvatar(),
+                  title: Text(activityDetails?.activityName ?? ''),
+                  subtitle: Row(
+                    children: [
+                      // Text(
+                      //   activityDetails?.activityDescription ?? 'ss',
+                      // ),
+                      Text(
+                        activityDetails?.createdBy ?? '',
+                      ),
+                      // Text(
+                      //   activityDetails?.selectedDate ?? 'ss',
+                      // ),
+                    ],
+                  ),
                 ),
               );
             },

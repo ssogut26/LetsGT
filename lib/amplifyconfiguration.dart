@@ -1,6 +1,4 @@
-const amplifyconfig =
-    '''
- {
+const amplifyconfig = ''' {
     "UserAgent": "aws-amplify-cli/2.0",
     "Version": "1.0",
     "api": {
@@ -10,7 +8,7 @@ const amplifyconfig =
                     "endpointType": "GraphQL",
                     "endpoint": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
                     "region": "eu-central-1",
-                    "authorizationType": "AMAZON_COGNITO_USER_POOLS"
+                    "authorizationType": "AWS_IAM"
                 }
             }
         }
@@ -27,14 +25,14 @@ const amplifyconfig =
                     "Default": {
                         "ApiUrl": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
                         "Region": "eu-central-1",
-                        "AuthMode": "AMAZON_COGNITO_USER_POOLS",
-                        "ClientDatabasePrefix": "letsgt_AMAZON_COGNITO_USER_POOLS"
-                    },
-                    "letsgt_AWS_IAM": {
-                        "ApiUrl": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
-                        "Region": "eu-central-1",
                         "AuthMode": "AWS_IAM",
                         "ClientDatabasePrefix": "letsgt_AWS_IAM"
+                    },
+                    "letsgt_AMAZON_COGNITO_USER_POOLS": {
+                        "ApiUrl": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
+                        "Region": "eu-central-1",
+                        "AuthMode": "AMAZON_COGNITO_USER_POOLS",
+                        "ClientDatabasePrefix": "letsgt_AMAZON_COGNITO_USER_POOLS"
                     }
                 },
                 "CredentialsProvider": {

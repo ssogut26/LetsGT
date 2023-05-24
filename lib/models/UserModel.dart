@@ -17,11 +17,10 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-import 'package:amplify_core/amplify_core.dart';
-import 'package:flutter/foundation.dart';
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
-import 'package:letsgt/models/ModelProvider.dart';
+import 'package:amplify_core/amplify_core.dart';
+import 'package:flutter/foundation.dart';
 
 /** This is an auto generated class representing the UserModel type in your schema. */
 @immutable
@@ -31,14 +30,12 @@ class UserModel extends Model {
     String? userName,
     String? location,
     String? userStatus,
-    FriendList? friends,
   }) {
     return UserModel._internal(
       id: id == null ? UUID.getUUID() : id,
       userName: userName,
       location: location,
       userStatus: userStatus,
-      friends: friends,
     );
   }
   const UserModel._internal({
@@ -46,13 +43,11 @@ class UserModel extends Model {
     String? userName,
     String? location,
     String? userStatus,
-    FriendList? friends,
     TemporalDateTime? createdAt,
     TemporalDateTime? updatedAt,
   })  : _userName = userName,
         _location = location,
         _userStatus = userStatus,
-        _friends = friends,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
@@ -61,13 +56,6 @@ class UserModel extends Model {
         _userName = json['userName'] as String?,
         _location = json['location'] as String?,
         _userStatus = json['userStatus'] as String?,
-        _friends = json['friends']?['serializedData'] != null
-            ? FriendList.fromJson(
-                new Map<String, dynamic>.from(
-                  json['friends']['serializedData'] as Map,
-                ),
-              )
-            : null,
         _createdAt = json['createdAt'] != null
             ? TemporalDateTime.fromString(json['createdAt'] as String)
             : null,
@@ -79,7 +67,6 @@ class UserModel extends Model {
   final String? _userName;
   final String? _location;
   final String? _userStatus;
-  final FriendList? _friends;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -110,10 +97,6 @@ class UserModel extends Model {
     return _userStatus;
   }
 
-  FriendList? get friends {
-    return _friends;
-  }
-
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -133,8 +116,7 @@ class UserModel extends Model {
         id == other.id &&
         _userName == other._userName &&
         _location == other._location &&
-        _userStatus == other._userStatus &&
-        _friends == other._friends;
+        _userStatus == other._userStatus;
   }
 
   @override
@@ -150,9 +132,6 @@ class UserModel extends Model {
     buffer.write('location=' + '$_location' + ', ');
     buffer.write('userStatus=' + '$_userStatus' + ', ');
     buffer.write(
-      'friends=' + (_friends != null ? _friends!.toString() : 'null') + ', ',
-    );
-    buffer.write(
       'createdAt=' +
           (_createdAt != null ? _createdAt!.format() : 'null') +
           ', ',
@@ -165,18 +144,12 @@ class UserModel extends Model {
     return buffer.toString();
   }
 
-  UserModel copyWith({
-    String? userName,
-    String? location,
-    String? userStatus,
-    FriendList? friends,
-  }) {
+  UserModel copyWith({String? userName, String? location, String? userStatus}) {
     return UserModel._internal(
       id: id,
       userName: userName ?? this.userName,
       location: location ?? this.location,
       userStatus: userStatus ?? this.userStatus,
-      friends: friends ?? this.friends,
     );
   }
 
@@ -185,7 +158,6 @@ class UserModel extends Model {
         'userName': _userName,
         'location': _location,
         'userStatus': _userStatus,
-        'friends': _friends?.toJson(),
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
@@ -195,7 +167,6 @@ class UserModel extends Model {
         'userName': _userName,
         'location': _location,
         'userStatus': _userStatus,
-        'friends': _friends,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
       };
@@ -206,7 +177,6 @@ class UserModel extends Model {
   static final QueryField USERNAME = QueryField(fieldName: 'userName');
   static final QueryField LOCATION = QueryField(fieldName: 'location');
   static final QueryField USERSTATUS = QueryField(fieldName: 'userStatus');
-  static final QueryField FRIENDS = QueryField(fieldName: 'friends');
   static ModelSchema schema = Model.defineSchema(
     define: (ModelSchemaDefinition modelSchemaDefinition) {
       modelSchemaDefinition.name = 'UserModel';
@@ -247,17 +217,6 @@ class UserModel extends Model {
           key: UserModel.USERSTATUS,
           isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
-        ),
-      );
-
-      modelSchemaDefinition.addField(
-        ModelFieldDefinition.embedded(
-          fieldName: 'friends',
-          isRequired: false,
-          ofType: ModelFieldType(
-            ModelFieldTypeEnum.embedded,
-            ofCustomTypeName: 'FriendList',
-          ),
         ),
       );
 

@@ -20,18 +20,19 @@
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 /** This is an auto generated class representing the ActivityModel type in your schema. */
 @immutable
 class ActivityModel extends Model {
   factory ActivityModel({
-    required String activityName,
-    required String activityDescription,
-    required String selectedLocation,
-    required String selectedDate,
     String? id,
-    String? participants,
+    String? activityName,
+    String? activityDescription,
+    String? selectedLocation,
+    TemporalDateTime? selectedDate,
+    List<String>? participants,
     String? createdBy,
   }) {
     return ActivityModel._internal(
@@ -40,17 +41,19 @@ class ActivityModel extends Model {
       activityDescription: activityDescription,
       selectedLocation: selectedLocation,
       selectedDate: selectedDate,
-      participants: participants,
+      participants: participants != null
+          ? List<String>.unmodifiable(participants)
+          : participants,
       createdBy: createdBy,
     );
   }
   const ActivityModel._internal({
     required this.id,
-    required String? activityName,
-    required String? activityDescription,
-    required String? selectedLocation,
-    required String? selectedDate,
-    String? participants,
+    String? activityName,
+    String? activityDescription,
+    String? selectedLocation,
+    TemporalDateTime? selectedDate,
+    List<String>? participants,
     String? createdBy,
     TemporalDateTime? createdAt,
     TemporalDateTime? updatedAt,
@@ -65,11 +68,17 @@ class ActivityModel extends Model {
 
   ActivityModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
-        _activityName = json['activityName'] as String,
-        _activityDescription = json['activityDescription'] as String,
-        _selectedLocation = json['selectedLocation'] as String,
-        _selectedDate = json['selectedDate'] as String,
-        _participants = json['participants'] as String?,
+        _activityName = json['activityName'] as String?,
+        _activityDescription = json['activityDescription'] as String?,
+        _selectedLocation = json['selectedLocation'] as String?,
+        _selectedDate = json['selectedDate'] != null
+            ? TemporalDateTime.fromString(json['selectedDate'] as String)
+            : null,
+        _participants = json['participants'] != null
+            ? List<String>.unmodifiable(
+                (json['participants'] as List).map((e) => e as String),
+              )
+            : null,
         _createdBy = json['createdBy'] as String?,
         _createdAt = json['createdAt'] != null
             ? TemporalDateTime.fromString(json['createdAt'] as String)
@@ -82,8 +91,8 @@ class ActivityModel extends Model {
   final String? _activityName;
   final String? _activityDescription;
   final String? _selectedLocation;
-  final String? _selectedDate;
-  final String? _participants;
+  final TemporalDateTime? _selectedDate;
+  final List<String>? _participants;
   final String? _createdBy;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
@@ -103,59 +112,23 @@ class ActivityModel extends Model {
     );
   }
 
-  String get activityName {
-    try {
-      return _activityName!;
-    } catch (e) {
-      throw new AmplifyCodeGenModelException(
-        AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-        recoverySuggestion: AmplifyExceptionMessages
-            .codeGenRequiredFieldForceCastRecoverySuggestion,
-        underlyingException: e.toString(),
-      );
-    }
+  String? get activityName {
+    return _activityName;
   }
 
-  String get activityDescription {
-    try {
-      return _activityDescription!;
-    } catch (e) {
-      throw new AmplifyCodeGenModelException(
-        AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-        recoverySuggestion: AmplifyExceptionMessages
-            .codeGenRequiredFieldForceCastRecoverySuggestion,
-        underlyingException: e.toString(),
-      );
-    }
+  String? get activityDescription {
+    return _activityDescription;
   }
 
-  String get selectedLocation {
-    try {
-      return _selectedLocation!;
-    } catch (e) {
-      throw new AmplifyCodeGenModelException(
-        AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-        recoverySuggestion: AmplifyExceptionMessages
-            .codeGenRequiredFieldForceCastRecoverySuggestion,
-        underlyingException: e.toString(),
-      );
-    }
+  String? get selectedLocation {
+    return _selectedLocation;
   }
 
-  String get selectedDate {
-    try {
-      return _selectedDate!;
-    } catch (e) {
-      throw new AmplifyCodeGenModelException(
-        AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-        recoverySuggestion: AmplifyExceptionMessages
-            .codeGenRequiredFieldForceCastRecoverySuggestion,
-        underlyingException: e.toString(),
-      );
-    }
+  TemporalDateTime? get selectedDate {
+    return _selectedDate;
   }
 
-  String? get participants {
+  List<String>? get participants {
     return _participants;
   }
 
@@ -184,7 +157,7 @@ class ActivityModel extends Model {
         _activityDescription == other._activityDescription &&
         _selectedLocation == other._selectedLocation &&
         _selectedDate == other._selectedDate &&
-        _participants == other._participants &&
+        DeepCollectionEquality().equals(_participants, other._participants) &&
         _createdBy == other._createdBy;
   }
 
@@ -200,8 +173,16 @@ class ActivityModel extends Model {
     buffer.write('activityName=' + '$_activityName' + ', ');
     buffer.write('activityDescription=' + '$_activityDescription' + ', ');
     buffer.write('selectedLocation=' + '$_selectedLocation' + ', ');
-    buffer.write('selectedDate=' + '$_selectedDate' + ', ');
-    buffer.write('participants=' + '$_participants' + ', ');
+    buffer.write(
+      'selectedDate=' +
+          (_selectedDate != null ? _selectedDate!.format() : 'null') +
+          ', ',
+    );
+    buffer.write(
+      'participants=' +
+          (_participants != null ? _participants!.toString() : 'null') +
+          ', ',
+    );
     buffer.write('createdBy=' + '$_createdBy' + ', ');
     buffer.write(
       'createdAt=' +
@@ -220,8 +201,8 @@ class ActivityModel extends Model {
     String? activityName,
     String? activityDescription,
     String? selectedLocation,
-    String? selectedDate,
-    String? participants,
+    TemporalDateTime? selectedDate,
+    List<String>? participants,
     String? createdBy,
   }) {
     return ActivityModel._internal(
@@ -240,7 +221,7 @@ class ActivityModel extends Model {
         'activityName': _activityName,
         'activityDescription': _activityDescription,
         'selectedLocation': _selectedLocation,
-        'selectedDate': _selectedDate,
+        'selectedDate': _selectedDate?.format(),
         'participants': _participants,
         'createdBy': _createdBy,
         'createdAt': _createdAt?.format(),
@@ -278,6 +259,7 @@ class ActivityModel extends Model {
       modelSchemaDefinition.authRules = [
         AuthRule(
           authStrategy: AuthStrategy.PRIVATE,
+          provider: AuthRuleProvider.IAM,
           operations: const [
             ModelOperation.CREATE,
             ModelOperation.UPDATE,
@@ -292,7 +274,7 @@ class ActivityModel extends Model {
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
           key: ActivityModel.ACTIVITYNAME,
-          isRequired: true,
+          isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),
       );
@@ -300,7 +282,7 @@ class ActivityModel extends Model {
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
           key: ActivityModel.ACTIVITYDESCRIPTION,
-          isRequired: true,
+          isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),
       );
@@ -308,7 +290,7 @@ class ActivityModel extends Model {
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
           key: ActivityModel.SELECTEDLOCATION,
-          isRequired: true,
+          isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),
       );
@@ -316,8 +298,8 @@ class ActivityModel extends Model {
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
           key: ActivityModel.SELECTEDDATE,
-          isRequired: true,
-          ofType: ModelFieldType(ModelFieldTypeEnum.string),
+          isRequired: false,
+          ofType: ModelFieldType(ModelFieldTypeEnum.dateTime),
         ),
       );
 
@@ -325,7 +307,11 @@ class ActivityModel extends Model {
         ModelFieldDefinition.field(
           key: ActivityModel.PARTICIPANTS,
           isRequired: false,
-          ofType: ModelFieldType(ModelFieldTypeEnum.string),
+          isArray: true,
+          ofType: ModelFieldType(
+            ModelFieldTypeEnum.collection,
+            ofModelName: describeEnum(ModelFieldTypeEnum.string),
+          ),
         ),
       );
 

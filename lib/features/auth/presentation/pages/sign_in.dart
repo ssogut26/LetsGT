@@ -26,69 +26,67 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         child: Padding(
           padding: AppPaddings.pagePadding,
           child: SingleChildScrollView(
-            child: Expanded(
-              child: Column(
-                children: [
-                  resizableHeightBox(
-                    context,
-                    keyboardClosedHeight: 0.2,
-                    keyboardOpenHeight: 0.1,
-                  ),
-                  const FlutterLogo(
-                    size: 35,
-                  ),
-                  resizableHeightBox(context),
-                  Text(
-                    'Sign in to your account',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  resizableHeightBox(
-                    context,
-                    keyboardClosedHeight: 0.02,
-                  ),
-                  Column(
-                    children: [
-                      const SignInEmailField(),
-                      const SignInPasswordField(),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            AutoRouter.of(context)
-                                .push(const ResetPasswordRoute());
-                          },
-                          child: const Text('Forgot Password?'),
-                        ),
+            child: Column(
+              children: [
+                resizableHeightBox(
+                  context,
+                  keyboardClosedHeight: 0.2,
+                  keyboardOpenHeight: 0.1,
+                ),
+                const FlutterLogo(
+                  size: 35,
+                ),
+                resizableHeightBox(context),
+                Text(
+                  'Sign in to your account',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                resizableHeightBox(
+                  context,
+                  keyboardClosedHeight: 0.02,
+                ),
+                Column(
+                  children: [
+                    const SignInEmailField(),
+                    const SignInPasswordField(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          AutoRouter.of(context)
+                              .push(const ResetPasswordRoute());
+                        },
+                        child: const Text('Forgot Password?'),
                       ),
-                    ],
-                  ),
-                  resizableHeightBox(context, keyboardClosedHeight: 0.06),
-                  AppElevatedButton(
-                    isLoading: signIn.isLoading,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        signIn.signIn(ref, context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in the form'),
-                          ),
-                        );
-                      }
-                    },
-                    text: 'SIGN IN',
-                  ),
-                  resizableHeightBox(context),
-                  TextButton(
-                    child: const Text("Don't have an account? Sign Up"),
-                    onPressed: () {
-                      AutoRouter.of(context).push(const SignUpRoute());
-                    },
-                  ),
-                  resizableHeightBox(context, keyboardClosedHeight: 0.01),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.06),
+                AppElevatedButton(
+                  isLoading: signIn.isLoading,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      signIn.signIn(ref, context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in the form'),
+                        ),
+                      );
+                    }
+                  },
+                  text: 'SIGN IN',
+                ),
+                resizableHeightBox(context),
+                TextButton(
+                  child: const Text("Don't have an account? Sign Up"),
+                  onPressed: () {
+                    AutoRouter.of(context).push(const SignUpRoute());
+                  },
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.01),
+              ],
             ),
           ),
         ),
