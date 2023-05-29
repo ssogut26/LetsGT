@@ -13,6 +13,7 @@ import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/create_activity/domain/entities/network_entities.dart';
 import 'package:letsgt/features/create_activity/domain/usecases/auto_complete_prediction.dart';
 import 'package:letsgt/features/create_activity/domain/usecases/place_auto_complate_response.dart';
+import 'package:letsgt/models/LocationModel.dart';
 
 class SearchQuery extends ChangeNotifier {
   String _query = '';
@@ -162,9 +163,15 @@ class _MapPageState extends ConsumerState<MapPage> {
       );
 
       final place = placemarks[0];
-      print(place);
-      address =
-          '${place.street}, ${place.thoroughfare}, ${place.subThoroughfare}, ${place.postalCode} ${place.subAdministrativeArea} ${place.administrativeArea}  ';
+      final addressDetails = [
+        place.street,
+        place.thoroughfare,
+        place.subThoroughfare,
+        place.postalCode,
+        place.subAdministrativeArea,
+        place.administrativeArea,
+      ];
+      address = addressDetails.where((element) => element != null).join(', ');
     } else {
       address = null;
     }
@@ -244,7 +251,12 @@ class _MapPageState extends ConsumerState<MapPage> {
                           onTap: () {
                             AutoRouter.of(context).popAndPush(
                               CreateActivityRoute(
-                                locationInfo: details?.result.name ?? address,
+                                locationInfo: LocationModel(
+                                  fullLocation: address ?? '',
+                                  latitude: position?.latitude.toString() ?? '',
+                                  longitude:
+                                      position?.longitude.toString() ?? '',
+                                ),
                               ),
                             );
                           },

@@ -17,11 +17,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
-
 import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+// ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
+
+import 'package:letsgt/models/ModelProvider.dart';
 
 /** This is an auto generated class representing the ActivityModel type in your schema. */
 @immutable
@@ -30,7 +31,7 @@ class ActivityModel extends Model {
     String? id,
     String? activityName,
     String? activityDescription,
-    String? selectedLocation,
+    LocationModel? selectedLocation,
     TemporalDateTime? selectedDate,
     List<String>? participants,
     String? createdBy,
@@ -47,11 +48,12 @@ class ActivityModel extends Model {
       createdBy: createdBy,
     );
   }
+
   const ActivityModel._internal({
     required this.id,
     String? activityName,
     String? activityDescription,
-    String? selectedLocation,
+    LocationModel? selectedLocation,
     TemporalDateTime? selectedDate,
     List<String>? participants,
     String? createdBy,
@@ -70,13 +72,21 @@ class ActivityModel extends Model {
       : id = json['id'] as String,
         _activityName = json['activityName'] as String?,
         _activityDescription = json['activityDescription'] as String?,
-        _selectedLocation = json['selectedLocation'] as String?,
+        _selectedLocation = json['selectedLocation']?['serializedData'] != null
+            ? LocationModel.fromJson(
+                new Map<String, dynamic>.from(
+                  json['selectedLocation']['serializedData'] as Map,
+                ),
+              )
+            : null,
         _selectedDate = json['selectedDate'] != null
             ? TemporalDateTime.fromString(json['selectedDate'] as String)
             : null,
         _participants = json['participants'] != null
             ? List<String>.unmodifiable(
-                (json['participants'] as List).map((e) => e as String),
+                (json['participants'] as List).map(
+                  (e) => e as String,
+                ),
               )
             : null,
         _createdBy = json['createdBy'] as String?,
@@ -90,7 +100,7 @@ class ActivityModel extends Model {
   final String id;
   final String? _activityName;
   final String? _activityDescription;
-  final String? _selectedLocation;
+  final LocationModel? _selectedLocation;
   final TemporalDateTime? _selectedDate;
   final List<String>? _participants;
   final String? _createdBy;
@@ -120,7 +130,7 @@ class ActivityModel extends Model {
     return _activityDescription;
   }
 
-  String? get selectedLocation {
+  LocationModel? get selectedLocation {
     return _selectedLocation;
   }
 
@@ -172,7 +182,11 @@ class ActivityModel extends Model {
     buffer.write('id=' + '$id' + ', ');
     buffer.write('activityName=' + '$_activityName' + ', ');
     buffer.write('activityDescription=' + '$_activityDescription' + ', ');
-    buffer.write('selectedLocation=' + '$_selectedLocation' + ', ');
+    buffer.write(
+      'selectedLocation=' +
+          (_selectedLocation != null ? _selectedLocation!.toString() : 'null') +
+          ', ',
+    );
     buffer.write(
       'selectedDate=' +
           (_selectedDate != null ? _selectedDate!.format() : 'null') +
@@ -200,7 +214,7 @@ class ActivityModel extends Model {
   ActivityModel copyWith({
     String? activityName,
     String? activityDescription,
-    String? selectedLocation,
+    LocationModel? selectedLocation,
     TemporalDateTime? selectedDate,
     List<String>? participants,
     String? createdBy,
@@ -220,7 +234,7 @@ class ActivityModel extends Model {
         'id': id,
         'activityName': _activityName,
         'activityDescription': _activityDescription,
-        'selectedLocation': _selectedLocation,
+        'selectedLocation': _selectedLocation?.toJson(),
         'selectedDate': _selectedDate?.format(),
         'participants': _participants,
         'createdBy': _createdBy,
@@ -259,7 +273,6 @@ class ActivityModel extends Model {
       modelSchemaDefinition.authRules = [
         AuthRule(
           authStrategy: AuthStrategy.PRIVATE,
-          provider: AuthRuleProvider.IAM,
           operations: const [
             ModelOperation.CREATE,
             ModelOperation.UPDATE,
@@ -288,10 +301,13 @@ class ActivityModel extends Model {
       );
 
       modelSchemaDefinition.addField(
-        ModelFieldDefinition.field(
-          key: ActivityModel.SELECTEDLOCATION,
+        ModelFieldDefinition.embedded(
+          fieldName: 'selectedLocation',
           isRequired: false,
-          ofType: ModelFieldType(ModelFieldTypeEnum.string),
+          ofType: ModelFieldType(
+            ModelFieldTypeEnum.embedded,
+            ofCustomTypeName: 'LocationModel',
+          ),
         ),
       );
 
@@ -365,7 +381,9 @@ class _ActivityModelModelType extends ModelType<ActivityModel> {
 @immutable
 class ActivityModelModelIdentifier implements ModelIdentifier<ActivityModel> {
   /** Create an instance of ActivityModelModelIdentifier using [id] the primary key. */
-  const ActivityModelModelIdentifier({required this.id});
+  const ActivityModelModelIdentifier({
+    required this.id,
+  });
   final String id;
 
   @override

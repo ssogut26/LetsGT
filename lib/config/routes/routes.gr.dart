@@ -204,7 +204,7 @@ class SignUpConfirmRoute extends PageRouteInfo<void> {
 class CreateActivityRoute extends PageRouteInfo<CreateActivityRouteArgs> {
   CreateActivityRoute({
     Key? key,
-    String? locationInfo,
+    LocationModel? locationInfo,
     List<PageRouteInfo>? children,
   }) : super(
           CreateActivityRoute.name,
@@ -229,7 +229,7 @@ class CreateActivityRouteArgs {
 
   final Key? key;
 
-  final String? locationInfo;
+  final LocationModel? locationInfo;
 
   @override
   String toString() {

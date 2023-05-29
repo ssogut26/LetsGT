@@ -7,7 +7,8 @@ import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/auth/presentation/pages/confirm_reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
-import 'package:letsgt/features/auth/services/auth_service.dart';
+import 'package:letsgt/features/create_activity/data/repository/create_activity_repository_impl.dart';
+import 'package:letsgt/models/LocationModel.dart';
 
 class ActivityNotifier extends ChangeNotifier {
   String? _activityName;
@@ -33,8 +34,8 @@ class ActivityNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createActivity(String selectedLocation) async {
-    await MyAuthService().createActivity(
+  Future<void> createActivity(LocationModel? selectedLocation) async {
+    await CreateActivityRepositoryImpl().createActivity(
       activityName: activityName ?? '',
       activityDescription: activityDescription ?? '',
       selectedLocation: selectedLocation,
@@ -52,7 +53,7 @@ final activityProvider = ChangeNotifierProvider(
 class CreateActivityPage extends ConsumerStatefulWidget {
   const CreateActivityPage({super.key, this.locationInfo});
 
-  final String? locationInfo;
+  final LocationModel? locationInfo;
 
   @override
   ConsumerState<CreateActivityPage> createState() => _SignInPageState();
@@ -174,7 +175,9 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                     Padding(
                       padding: AppPaddings.fieldAndButtonPadding,
                       child: ListTile(
-                        title: Text(widget.locationInfo ?? 'Select Location'),
+                        title: Text(
+                          widget.locationInfo?.fullLocation ?? '',
+                        ),
                         trailing: IconButton(
                           onPressed: () {
                             AutoRouter.of(context).push(
@@ -254,7 +257,7 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                           _formKey.currentState?.save();
                           await activityHandler
                               .createActivity(
-                                widget.locationInfo ?? '',
+                                widget.locationInfo,
                               )
                               .whenComplete(
                                 () async =>

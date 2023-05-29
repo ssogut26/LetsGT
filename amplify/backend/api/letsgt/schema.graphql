@@ -1,8 +1,14 @@
-type ActivityModel @model @auth(rules: [{allow: private, provider: iam}]) {
+type LocationModel {
+  fullLocation: String
+  longitude: String
+  latitude: String
+}
+
+type ActivityModel @model @auth(rules: [{allow: private}]) {
   id: ID!
   activityName: String
   activityDescription: String
-  selectedLocation: String
+  selectedLocation: LocationModel
   selectedDate: AWSDateTime
   participants: [String]
   createdBy: String

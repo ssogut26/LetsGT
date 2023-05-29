@@ -14,6 +14,7 @@ import 'package:letsgt/features/home/presentation/pages/home.dart';
 import 'package:letsgt/features/messages/presentation/pages/chat.dart';
 import 'package:letsgt/features/messages/presentation/pages/messages.dart';
 import 'package:letsgt/features/profile/presentation/pages/profile.dart';
+import 'package:letsgt/models/LocationModel.dart';
 
 part 'routes.gr.dart';
 
