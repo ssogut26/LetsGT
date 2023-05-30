@@ -22,56 +22,62 @@
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
-/** This is an auto generated class representing the UserModel type in your schema. */
+/** This is an auto generated class representing the PostsModel type in your schema. */
 @immutable
-class UserModel extends Model {
-  factory UserModel({
+class PostsModel extends Model {
+  factory PostsModel({
     String? id,
-    String? userName,
-    String? location,
-    String? userStatus,
+    String? description,
+    String? createdBy,
+    String? shortLocation,
+    String? imageURL,
   }) {
-    return UserModel._internal(
+    return PostsModel._internal(
       id: id == null ? UUID.getUUID() : id,
-      userName: userName,
-      location: location,
-      userStatus: userStatus,
+      description: description,
+      createdBy: createdBy,
+      shortLocation: shortLocation,
+      imageURL: imageURL,
     );
   }
-  const UserModel._internal({
+  const PostsModel._internal({
     required this.id,
-    String? userName,
-    String? location,
-    String? userStatus,
+    String? description,
+    String? createdBy,
+    String? shortLocation,
+    String? imageURL,
     TemporalDateTime? createdAt,
     TemporalDateTime? updatedAt,
-  })  : _userName = userName,
-        _location = location,
-        _userStatus = userStatus,
+  })  : _description = description,
+        _createdBy = createdBy,
+        _shortLocation = shortLocation,
+        _imageURL = imageURL,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
-  UserModel.fromJson(Map<String, dynamic> json)
+  PostsModel.fromJson(Map<String, dynamic> json)
       : id = json['id'] as String,
-        _userName = json['userName'] as String?,
-        _location = json['location'] as String?,
-        _userStatus = json['userStatus'] as String?,
+        _description = json['description'] as String?,
+        _createdBy = json['createdBy'] as String?,
+        _shortLocation = json['shortLocation'] as String?,
+        _imageURL = json['imageURL'] as String?,
         _createdAt = json['createdAt'] != null
             ? TemporalDateTime.fromString(json['createdAt'] as String)
             : null,
         _updatedAt = json['updatedAt'] != null
             ? TemporalDateTime.fromString(json['updatedAt'] as String)
             : null;
-  static const classType = const _UserModelModelType();
+  static const classType = const _PostsModelModelType();
   final String id;
-  final String? _userName;
-  final String? _location;
-  final String? _userStatus;
+  final String? _description;
+  final String? _createdBy;
+  final String? _shortLocation;
+  final String? _imageURL;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
   @override
-  _UserModelModelType getInstanceType() => classType;
+  _PostsModelModelType getInstanceType() => classType;
 
   @Deprecated(
     '[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.',
@@ -79,22 +85,26 @@ class UserModel extends Model {
   @override
   String getId() => id;
 
-  UserModelModelIdentifier get modelIdentifier {
-    return UserModelModelIdentifier(
+  PostsModelModelIdentifier get modelIdentifier {
+    return PostsModelModelIdentifier(
       id: id,
     );
   }
 
-  String? get userName {
-    return _userName;
+  String? get description {
+    return _description;
   }
 
-  String? get location {
-    return _location;
+  String? get createdBy {
+    return _createdBy;
   }
 
-  String? get userStatus {
-    return _userStatus;
+  String? get shortLocation {
+    return _shortLocation;
+  }
+
+  String? get imageURL {
+    return _imageURL;
   }
 
   TemporalDateTime? get createdAt {
@@ -112,11 +122,12 @@ class UserModel extends Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is UserModel &&
+    return other is PostsModel &&
         id == other.id &&
-        _userName == other._userName &&
-        _location == other._location &&
-        _userStatus == other._userStatus;
+        _description == other._description &&
+        _createdBy == other._createdBy &&
+        _shortLocation == other._shortLocation &&
+        _imageURL == other._imageURL;
   }
 
   @override
@@ -126,11 +137,12 @@ class UserModel extends Model {
   String toString() {
     final buffer = new StringBuffer();
 
-    buffer.write('UserModel {');
+    buffer.write('PostsModel {');
     buffer.write('id=' + '$id' + ', ');
-    buffer.write('userName=' + '$_userName' + ', ');
-    buffer.write('location=' + '$_location' + ', ');
-    buffer.write('userStatus=' + '$_userStatus' + ', ');
+    buffer.write('description=' + '$_description' + ', ');
+    buffer.write('createdBy=' + '$_createdBy' + ', ');
+    buffer.write('shortLocation=' + '$_shortLocation' + ', ');
+    buffer.write('imageURL=' + '$_imageURL' + ', ');
     buffer.write(
       'createdAt=' +
           (_createdAt != null ? _createdAt!.format() : 'null') +
@@ -144,44 +156,55 @@ class UserModel extends Model {
     return buffer.toString();
   }
 
-  UserModel copyWith({String? userName, String? location, String? userStatus}) {
-    return UserModel._internal(
+  PostsModel copyWith({
+    String? description,
+    String? createdBy,
+    String? shortLocation,
+    String? imageURL,
+  }) {
+    return PostsModel._internal(
       id: id,
-      userName: userName ?? this.userName,
-      location: location ?? this.location,
-      userStatus: userStatus ?? this.userStatus,
+      description: description ?? this.description,
+      createdBy: createdBy ?? this.createdBy,
+      shortLocation: shortLocation ?? this.shortLocation,
+      imageURL: imageURL ?? this.imageURL,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'userName': _userName,
-        'location': _location,
-        'userStatus': _userStatus,
+        'description': _description,
+        'createdBy': _createdBy,
+        'shortLocation': _shortLocation,
+        'imageURL': _imageURL,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
 
   Map<String, Object?> toMap() => {
         'id': id,
-        'userName': _userName,
-        'location': _location,
-        'userStatus': _userStatus,
+        'description': _description,
+        'createdBy': _createdBy,
+        'shortLocation': _shortLocation,
+        'imageURL': _imageURL,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
       };
 
-  static final QueryModelIdentifier<UserModelModelIdentifier> MODEL_IDENTIFIER =
-      QueryModelIdentifier<UserModelModelIdentifier>();
+  static final QueryModelIdentifier<PostsModelModelIdentifier>
+      MODEL_IDENTIFIER = QueryModelIdentifier<PostsModelModelIdentifier>();
   static final QueryField<String> ID = QueryField(fieldName: 'id');
-  static final QueryField<String> USERNAME = QueryField(fieldName: 'userName');
-  static final QueryField<String> LOCATION = QueryField(fieldName: 'location');
-  static final QueryField<String> USERSTATUS =
-      QueryField(fieldName: 'userStatus');
+  static final QueryField<String> DESCRIPTION =
+      QueryField(fieldName: 'description');
+  static final QueryField<String> CREATEDBY =
+      QueryField(fieldName: 'createdBy');
+  static final QueryField<String> SHORTLOCATION =
+      QueryField(fieldName: 'shortLocation');
+  static final QueryField<String> IMAGEURL = QueryField(fieldName: 'imageURL');
   static ModelSchema schema = Model.defineSchema(
     define: (ModelSchemaDefinition modelSchemaDefinition) {
-      modelSchemaDefinition.name = 'UserModel';
-      modelSchemaDefinition.pluralName = 'UserModels';
+      modelSchemaDefinition.name = 'PostsModel';
+      modelSchemaDefinition.pluralName = 'PostsModels';
 
       modelSchemaDefinition.authRules = [
         AuthRule(
@@ -199,7 +222,7 @@ class UserModel extends Model {
 
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
-          key: UserModel.USERNAME,
+          key: PostsModel.DESCRIPTION,
           isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),
@@ -207,7 +230,7 @@ class UserModel extends Model {
 
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
-          key: UserModel.LOCATION,
+          key: PostsModel.CREATEDBY,
           isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),
@@ -215,7 +238,15 @@ class UserModel extends Model {
 
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
-          key: UserModel.USERSTATUS,
+          key: PostsModel.SHORTLOCATION,
+          isRequired: false,
+          ofType: ModelFieldType(ModelFieldTypeEnum.string),
+        ),
+      );
+
+      modelSchemaDefinition.addField(
+        ModelFieldDefinition.field(
+          key: PostsModel.IMAGEURL,
           isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),
@@ -242,28 +273,28 @@ class UserModel extends Model {
   );
 }
 
-class _UserModelModelType extends ModelType<UserModel> {
-  const _UserModelModelType();
+class _PostsModelModelType extends ModelType<PostsModel> {
+  const _PostsModelModelType();
 
   @override
-  UserModel fromJson(Map<String, dynamic> jsonData) {
-    return UserModel.fromJson(jsonData);
+  PostsModel fromJson(Map<String, dynamic> jsonData) {
+    return PostsModel.fromJson(jsonData);
   }
 
   @override
   String modelName() {
-    return 'UserModel';
+    return 'PostsModel';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [UserModel] in your schema.
+ * of [PostsModel] in your schema.
  */
 @immutable
-class UserModelModelIdentifier implements ModelIdentifier<UserModel> {
-  /** Create an instance of UserModelModelIdentifier using [id] the primary key. */
-  const UserModelModelIdentifier({required this.id});
+class PostsModelModelIdentifier implements ModelIdentifier<PostsModel> {
+  /** Create an instance of PostsModelModelIdentifier using [id] the primary key. */
+  const PostsModelModelIdentifier({required this.id});
   final String id;
 
   @override
@@ -279,7 +310,7 @@ class UserModelModelIdentifier implements ModelIdentifier<UserModel> {
   String serializeAsString() => serializeAsMap().values.join('#');
 
   @override
-  String toString() => 'UserModelModelIdentifier(id: $id)';
+  String toString() => 'PostsModelModelIdentifier(id: $id)';
 
   @override
   bool operator ==(Object other) {
@@ -287,7 +318,7 @@ class UserModelModelIdentifier implements ModelIdentifier<UserModel> {
       return true;
     }
 
-    return other is UserModelModelIdentifier && id == other.id;
+    return other is PostsModelModelIdentifier && id == other.id;
   }
 
   @override

@@ -10,6 +10,7 @@ import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up_confirm.dart';
 import 'package:letsgt/features/create_activity/presentation/pages/create_activity.dart';
 import 'package:letsgt/features/create_activity/presentation/pages/map_view.dart';
+import 'package:letsgt/features/create_post/presantation/create_post.dart';
 import 'package:letsgt/features/home/presentation/pages/home.dart';
 import 'package:letsgt/features/messages/presentation/pages/chat.dart';
 import 'package:letsgt/features/messages/presentation/pages/messages.dart';
@@ -77,6 +78,12 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: ActivityDetailRoute.page,
+          guards: [
+            AuthGuard(),
+          ],
+        ),
+        AutoRoute(
+          page: CreatePostRoute.page,
           guards: [
             AuthGuard(),
           ],

@@ -7,40 +7,41 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  amplify_api: ^1.0.1
-  amplify_auth_cognito: ^1.0.1
-  amplify_authenticator: ^1.0.1
-  amplify_flutter: ^1.0.1
-  auto_route: ^7.1.0
+  amplify_api: ^1.1.0
+  amplify_auth_cognito: ^1.1.0
+  amplify_authenticator: ^1.1.0
+  amplify_flutter: ^1.1.0
+  auto_route: ^7.3.2
   flutter:
     sdk: flutter
   flutter_config_plus: ^1.1.1
   flutter_dotenv: ^5.0.2
+  flutter_polyline_points: ^1.0.0
   flutter_riverpod: ^2.3.6
   flutter_secure_storage: ^8.0.0
-  freezed: ^2.3.3
+  freezed: ^2.3.4
   freezed_annotation: ^2.2.0
   geocoding: ^2.1.0
   geolocator: ^9.0.2
-  google_maps: ^6.2.0
-  google_maps_flutter: ^2.2.6
-  google_maps_webservice: ^0.0.20-nullsafety.5
-  http: ^0.13.6
-  image_picker: ^0.8.7+4
+  google_maps: ^6.3.0
+  google_maps_flutter: ^2.2.8
+  google_maps_webservice: ^0.0.19
+  http: ^0.13.4
+  image_picker: ^0.8.7+5
   intl: ^0.18.0
   json_serializable: ^6.7.0
-  mockito: ^5.4.0
+  mockito: ^5.4.1
   permission_handler: ^10.2.0
   permission_handler_web: ^0.0.2
   riverpod: ^2.3.6
 
 dev_dependencies:
-  auto_route_generator: ^7.0.0
-  build_runner: ^2.3.9
+  auto_route_generator: ^7.1.1
+  build_runner: ^2.4.4
   flutter_test:
     sdk: flutter
   json_annotation: ^4.8.1
-  very_good_analysis: ^5.0.0
+  very_good_analysis: ^5.0.0+1
 flutter:
   uses-material-design: true
 

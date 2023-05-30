@@ -1,3 +1,11 @@
+type PostsModel @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  description: String
+  createdBy: String
+  shortLocation: String
+  imageURL: String
+}
+
 type LocationModel {
   fullLocation: String
   longitude: String

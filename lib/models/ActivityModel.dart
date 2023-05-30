@@ -256,15 +256,19 @@ class ActivityModel extends Model {
 
   static final QueryModelIdentifier<ActivityModelModelIdentifier>
       MODEL_IDENTIFIER = QueryModelIdentifier<ActivityModelModelIdentifier>();
-  static final QueryField ID = QueryField(fieldName: 'id');
-  static final QueryField ACTIVITYNAME = QueryField(fieldName: 'activityName');
-  static final QueryField ACTIVITYDESCRIPTION =
+  static final QueryField<String> ID = QueryField(fieldName: 'id');
+  static final QueryField<String> ACTIVITYNAME =
+      QueryField(fieldName: 'activityName');
+  static final QueryField<String> ACTIVITYDESCRIPTION =
       QueryField(fieldName: 'activityDescription');
-  static final QueryField SELECTEDLOCATION =
+  static final QueryField<LocationModel> SELECTEDLOCATION =
       QueryField(fieldName: 'selectedLocation');
-  static final QueryField SELECTEDDATE = QueryField(fieldName: 'selectedDate');
-  static final QueryField PARTICIPANTS = QueryField(fieldName: 'participants');
-  static final QueryField CREATEDBY = QueryField(fieldName: 'createdBy');
+  static final QueryField<String> SELECTEDDATE =
+      QueryField(fieldName: 'selectedDate');
+  static final QueryField<List<String>> PARTICIPANTS =
+      QueryField(fieldName: 'participants');
+  static final QueryField<String> CREATEDBY =
+      QueryField(fieldName: 'createdBy');
   static ModelSchema schema = Model.defineSchema(
     define: (ModelSchemaDefinition modelSchemaDefinition) {
       modelSchemaDefinition.name = 'ActivityModel';

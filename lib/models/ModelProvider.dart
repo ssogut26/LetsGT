@@ -21,18 +21,20 @@
 
 import 'package:amplify_core/amplify_core.dart';
 import 'ActivityModel.dart';
+import 'PostsModel.dart';
 import 'UserModel.dart';
 import 'LocationModel.dart';
 
 export 'ActivityModel.dart';
 export 'LocationModel.dart';
+export 'PostsModel.dart';
 export 'UserModel.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "b1c6c4766f44a14ea465c15dc17cc41f";
+  String version = "00df60d0191a249fcc9a66ffc481ee15";
   @override
-  List<ModelSchema> modelSchemas = [ActivityModel.schema, UserModel.schema];
+  List<ModelSchema> modelSchemas = [ActivityModel.schema, PostsModel.schema, UserModel.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
   List<ModelSchema> customTypeSchemas = [LocationModel.schema];
@@ -43,6 +45,8 @@ class ModelProvider implements ModelProviderInterface {
     switch(modelName) {
       case "ActivityModel":
         return ActivityModel.classType;
+      case "PostsModel":
+        return PostsModel.classType;
       case "UserModel":
         return UserModel.classType;
       default:
