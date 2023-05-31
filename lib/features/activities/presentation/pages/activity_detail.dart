@@ -165,17 +165,19 @@ class _ActivityDetailPageState extends ConsumerState<ActivityDetailPage> {
           ),
         ],
       ),
-      bottomSheet: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.03,
-        width: double.infinity,
-        child: Center(
-          child: Text(
-            distance > 1000
-                ? 'Distance ${(distance / 1000).toStringAsFixed(3)} km'
-                : 'Distance ${distance.toStringAsFixed(0)} m',
-          ),
-        ),
-      ),
+      bottomSheet: distance == 0
+          ? const SizedBox.shrink()
+          : SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
+              width: double.infinity,
+              child: Center(
+                child: Text(
+                  distance > 1000
+                      ? 'Distance ${(distance / 1000).toStringAsFixed(1)} km'
+                      : 'Distance ${distance.toStringAsFixed(0)} m',
+                ),
+              ),
+            ),
       body: activityDetails.when(
         error: (error, stackTrace) => Center(
           child: Text(
@@ -185,6 +187,7 @@ class _ActivityDetailPageState extends ConsumerState<ActivityDetailPage> {
         data: (ActivityModel? data) {
           final locationDetails = data?.selectedLocation;
           return ListView(
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),

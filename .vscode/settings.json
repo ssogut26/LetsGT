@@ -13,6 +13,7 @@
     "amplifyconfig",
     "dotenv",
     "letsgt",
+    "riverpod",
     "usecases"
   ]
 }

@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:letsgt/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:letsgt/features/create_post/domain/repository/create_post_repository.dart';
 import 'package:letsgt/models/PostsModel.dart';
 
@@ -10,19 +9,20 @@ class CreatePostRepositoryImpl implements CreatePostRepository {
   Future<void> createPost(
     String description,
     String location,
-    String imageURL,
+    String randomId,
   ) async {
-    final attributes = await Amplify.Auth.fetchUserAttributes();
-    final userName = attributes
-        .firstWhere((element) => element.userAttributeKey.key == 'name')
-        .value;
-    final randomId = Random().nextInt(10000);
+    final userName = await AuthUseCases().getUserName();
+    ///!TODO Try to implement image url to post model for not making
+    // second request for the get image url
+    // final image = Amplify.Storage.getUrl(key: randomId);
+    // final imageResult = await image.result;
+    // final imageUrl = imageResult.url.toString();
     final postModel = PostsModel(
-      id: randomId.toString(),
+      id: randomId,
       description: description,
       shortLocation: location,
+      // imageUrl: imageUrl,
       createdBy: userName,
-      imageURL: imageURL,
     );
 
     try {

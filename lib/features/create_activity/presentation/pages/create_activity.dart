@@ -176,7 +176,8 @@ class _SignInPageState extends ConsumerState<CreateActivityPage> {
                       padding: AppPaddings.fieldAndButtonPadding,
                       child: ListTile(
                         title: Text(
-                          widget.locationInfo?.fullLocation ?? '',
+                          widget.locationInfo?.fullLocation ??
+                              'Select Location',
                         ),
                         trailing: IconButton(
                           onPressed: () {

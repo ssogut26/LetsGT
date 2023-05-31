@@ -30,14 +30,12 @@ class PostsModel extends Model {
     String? description,
     String? createdBy,
     String? shortLocation,
-    String? imageURL,
   }) {
     return PostsModel._internal(
       id: id == null ? UUID.getUUID() : id,
       description: description,
       createdBy: createdBy,
       shortLocation: shortLocation,
-      imageURL: imageURL,
     );
   }
   const PostsModel._internal({
@@ -45,13 +43,11 @@ class PostsModel extends Model {
     String? description,
     String? createdBy,
     String? shortLocation,
-    String? imageURL,
     TemporalDateTime? createdAt,
     TemporalDateTime? updatedAt,
   })  : _description = description,
         _createdBy = createdBy,
         _shortLocation = shortLocation,
-        _imageURL = imageURL,
         _createdAt = createdAt,
         _updatedAt = updatedAt;
 
@@ -60,7 +56,6 @@ class PostsModel extends Model {
         _description = json['description'] as String?,
         _createdBy = json['createdBy'] as String?,
         _shortLocation = json['shortLocation'] as String?,
-        _imageURL = json['imageURL'] as String?,
         _createdAt = json['createdAt'] != null
             ? TemporalDateTime.fromString(json['createdAt'] as String)
             : null,
@@ -72,7 +67,6 @@ class PostsModel extends Model {
   final String? _description;
   final String? _createdBy;
   final String? _shortLocation;
-  final String? _imageURL;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -103,10 +97,6 @@ class PostsModel extends Model {
     return _shortLocation;
   }
 
-  String? get imageURL {
-    return _imageURL;
-  }
-
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -126,8 +116,7 @@ class PostsModel extends Model {
         id == other.id &&
         _description == other._description &&
         _createdBy == other._createdBy &&
-        _shortLocation == other._shortLocation &&
-        _imageURL == other._imageURL;
+        _shortLocation == other._shortLocation;
   }
 
   @override
@@ -142,7 +131,6 @@ class PostsModel extends Model {
     buffer.write('description=' + '$_description' + ', ');
     buffer.write('createdBy=' + '$_createdBy' + ', ');
     buffer.write('shortLocation=' + '$_shortLocation' + ', ');
-    buffer.write('imageURL=' + '$_imageURL' + ', ');
     buffer.write(
       'createdAt=' +
           (_createdAt != null ? _createdAt!.format() : 'null') +
@@ -160,14 +148,12 @@ class PostsModel extends Model {
     String? description,
     String? createdBy,
     String? shortLocation,
-    String? imageURL,
   }) {
     return PostsModel._internal(
       id: id,
       description: description ?? this.description,
       createdBy: createdBy ?? this.createdBy,
       shortLocation: shortLocation ?? this.shortLocation,
-      imageURL: imageURL ?? this.imageURL,
     );
   }
 
@@ -176,7 +162,6 @@ class PostsModel extends Model {
         'description': _description,
         'createdBy': _createdBy,
         'shortLocation': _shortLocation,
-        'imageURL': _imageURL,
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
@@ -186,7 +171,6 @@ class PostsModel extends Model {
         'description': _description,
         'createdBy': _createdBy,
         'shortLocation': _shortLocation,
-        'imageURL': _imageURL,
         'createdAt': _createdAt,
         'updatedAt': _updatedAt
       };
@@ -200,7 +184,6 @@ class PostsModel extends Model {
       QueryField(fieldName: 'createdBy');
   static final QueryField<String> SHORTLOCATION =
       QueryField(fieldName: 'shortLocation');
-  static final QueryField<String> IMAGEURL = QueryField(fieldName: 'imageURL');
   static ModelSchema schema = Model.defineSchema(
     define: (ModelSchemaDefinition modelSchemaDefinition) {
       modelSchemaDefinition.name = 'PostsModel';
@@ -239,14 +222,6 @@ class PostsModel extends Model {
       modelSchemaDefinition.addField(
         ModelFieldDefinition.field(
           key: PostsModel.SHORTLOCATION,
-          isRequired: false,
-          ofType: ModelFieldType(ModelFieldTypeEnum.string),
-        ),
-      );
-
-      modelSchemaDefinition.addField(
-        ModelFieldDefinition.field(
-          key: PostsModel.IMAGEURL,
           isRequired: false,
           ofType: ModelFieldType(ModelFieldTypeEnum.string),
         ),

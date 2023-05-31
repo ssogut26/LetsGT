@@ -11,7 +11,9 @@ dependencies:
   amplify_auth_cognito: ^1.1.0
   amplify_authenticator: ^1.1.0
   amplify_flutter: ^1.1.0
+  amplify_storage_s3: ^1.1.0
   auto_route: ^7.3.2
+  cached_network_image: ^3.2.3
   flutter:
     sdk: flutter
   flutter_config_plus: ^1.1.1
