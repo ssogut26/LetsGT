@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/app.dart';
 import 'package:letsgt/config/routes/routes.dart';
+import 'package:letsgt/models/ModelProvider.dart';
 
 abstract class AmplifyAuthService {
   Future<void> signInUser(
@@ -31,6 +32,11 @@ abstract class AmplifyAuthService {
   Future<void> signOut();
   Future<void> resetPassword({
     String? username,
+  });
+  Future<void> saveUserData({
+    required String name,
+    required String email,
+    required String phoneNumber,
   });
 }
 
@@ -83,7 +89,7 @@ class MyAuthService implements AmplifyAuthService {
         newPassword: newPassword,
         confirmationCode: confirmationCode,
       );
-
+      await ref?.read(appRouterProvider).replace(const SignInRoute());
       safePrint('Password reset complete: ${result.isPasswordReset}');
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context!).showSnackBar(
@@ -244,7 +250,13 @@ class MyAuthService implements AmplifyAuthService {
           userAttributes: userAttributes,
         ),
       );
-      await _handleSignUpResult(result, ref, context);
+      await _handleSignUpResult(result, ref, context).whenComplete(
+        () async => saveUserData(
+          name: name,
+          email: email,
+          phoneNumber: phoneNumber ?? '',
+        ),
+      );
     } on AuthException catch (e) {
       safePrint('Error signing up user: ${e.message}');
     }
@@ -310,6 +322,35 @@ class MyAuthService implements AmplifyAuthService {
       await _handleSignUpResult(result, ref, context);
     } on AuthException catch (e) {
       safePrint('Error confirming user: ${e.message}');
+    }
+  }
+
+  @override
+  Future<void> saveUserData({
+    required String name,
+    required String email,
+    required String phoneNumber,
+  }) async {
+    try {
+      final userData = UserModel(
+        userName: name,
+        id: '1',
+        location: '',
+        userStatus: 'Active',
+      );
+      final request = ModelMutations.create(
+        userData,
+      );
+
+      final response = await Amplify.API.mutate(request: request).response;
+      final createdUserData = response.data;
+      if (createdUserData != null) {
+        safePrint('User data saved successfully');
+      } else {
+        safePrint('User data not saved');
+      }
+    } on ApiException catch (e) {
+      safePrint('Error saving user data: ${e.message}');
     }
   }
 }

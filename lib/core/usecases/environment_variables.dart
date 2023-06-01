@@ -7,4 +7,5 @@ class EnvironmentVariables {
   static String get cognitoUserPoolId =>
       dotenv.env['COGNITO_USER_POOL_ID'] ?? '';
   static String get endpoint => dotenv.env['GRAPHQL_ENDPOINT'] ?? '';
+  static String get mapsApiKey => dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
 }

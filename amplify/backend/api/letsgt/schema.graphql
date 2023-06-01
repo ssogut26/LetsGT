@@ -1,15 +1,25 @@
-type ActivityModel @model @auth(rules: [{allow: private}]) {
+type PostsModel @model @auth(rules: [{allow: private}]) {
   id: ID!
-  activityName: String!
-  activityDescription: String!
-  selectedLocation: String!
-  selectedDate: String!
-  participants: String
+  description: String
+  createdBy: String
+  shortLocation: String
+  imageURL: String
 }
 
-type FriendList {
-  friendName: String
-  friendStatus: String
+type LocationModel {
+  fullLocation: String
+  longitude: String
+  latitude: String
+}
+
+type ActivityModel @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  activityName: String
+  activityDescription: String
+  selectedLocation: LocationModel
+  selectedDate: AWSDateTime
+  participants: [String]
+  createdBy: String
 }
 
 type UserModel @model @auth(rules: [{allow: private}]) {
@@ -17,6 +27,5 @@ type UserModel @model @auth(rules: [{allow: private}]) {
   userName: String
   location: String
   userStatus: String
-  friends: FriendList
 }
  

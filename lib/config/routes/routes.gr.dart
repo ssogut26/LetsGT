@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ActivitiesPage(),
       );
     },
+    ActivityDetailRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ActivityDetailPage(),
+      );
+    },
     ConfirmResetPasswordRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -68,6 +74,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MapPage(),
       );
     },
+    CreatePostRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CreatePostPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -105,6 +117,20 @@ class ActivitiesRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ActivitiesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ActivityDetailPage]
+class ActivityDetailRoute extends PageRouteInfo<void> {
+  const ActivityDetailRoute({List<PageRouteInfo>? children})
+      : super(
+          ActivityDetailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ActivityDetailRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -184,7 +210,7 @@ class SignUpConfirmRoute extends PageRouteInfo<void> {
 class CreateActivityRoute extends PageRouteInfo<CreateActivityRouteArgs> {
   CreateActivityRoute({
     Key? key,
-    String? locationInfo,
+    LocationModel? locationInfo,
     List<PageRouteInfo>? children,
   }) : super(
           CreateActivityRoute.name,
@@ -209,7 +235,7 @@ class CreateActivityRouteArgs {
 
   final Key? key;
 
-  final String? locationInfo;
+  final LocationModel? locationInfo;
 
   @override
   String toString() {
@@ -227,6 +253,20 @@ class MapRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MapRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CreatePostPage]
+class CreatePostRoute extends PageRouteInfo<void> {
+  const CreatePostRoute({List<PageRouteInfo>? children})
+      : super(
+          CreatePostRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PostRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

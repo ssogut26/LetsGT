@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -12,6 +13,7 @@ import 'package:letsgt/core/usecases/paddings.dart';
 import 'package:letsgt/features/create_activity/domain/entities/network_entities.dart';
 import 'package:letsgt/features/create_activity/domain/usecases/auto_complete_prediction.dart';
 import 'package:letsgt/features/create_activity/domain/usecases/place_auto_complate_response.dart';
+import 'package:letsgt/models/LocationModel.dart';
 
 class SearchQuery extends ChangeNotifier {
   String _query = '';
@@ -72,7 +74,6 @@ class LocationProvider extends ChangeNotifier {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     final currentPosition = await Geolocator.getCurrentPosition();
-
     _position = LatLng(
       currentPosition.latitude,
       currentPosition.longitude,
@@ -149,8 +150,32 @@ class _MapPageState extends ConsumerState<MapPage> {
   }
 
   PlacesDetailsResponse? details;
-  LatLng? position;
-  String? markerId;
+  String? address;
+  LatLng? position = const LatLng(0, 0);
+
+  Future<void> GetAddressFromLatLong(LatLng aposition) async {
+    aposition = position ?? const LatLng(0, 0);
+    if (position != null) {
+      final placemarks = await placemarkFromCoordinates(
+        position!.latitude,
+        position!.longitude,
+      );
+
+      final place = placemarks[0];
+      final addressDetails = [
+        place.street,
+        place.thoroughfare,
+        place.subThoroughfare,
+        place.postalCode,
+        place.subAdministrativeArea,
+        place.administrativeArea,
+      ];
+      address = addressDetails.where((element) => element != null).join(', ');
+    } else {
+      address = null;
+    }
+  }
+
   Future<void> navigateTo(String place) async {
     details = await places.getDetailsByPlaceId(place);
     final lat = details?.result.geometry?.location.lat ?? 0;
@@ -160,17 +185,17 @@ class _MapPageState extends ConsumerState<MapPage> {
 
     await _controller
         ?.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: position!,
-          zoom: 14,
-        ),
-      ),
-    )
-        .then((_) async {
-      await Future<void>.delayed(const Duration(seconds: 1));
-      await _controller?.showMarkerInfoWindow(const MarkerId('1'));
-    });
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: position ?? const LatLng(0, 0),
+              zoom: 14,
+            ),
+          ),
+        )
+        .whenComplete(
+          () async =>
+              await _controller?.showMarkerInfoWindow(const MarkerId('1')),
+        );
   }
 
   @override
@@ -209,26 +234,32 @@ class _MapPageState extends ConsumerState<MapPage> {
               buildingsEnabled: true,
               myLocationButtonEnabled: true,
               onLongPress: (value) async {
-                // ADD MARKER
                 setState(() {
                   position = value;
                 });
+                await GetAddressFromLatLong(value);
+                await _controller?.showMarkerInfoWindow(const MarkerId('2'));
               },
               markers: position == null
                   ? {}
                   : {
                       Marker(
                         markerId: const MarkerId('1'),
-                        position: position!,
+                        position: position ?? const LatLng(0, 0),
                         infoWindow: InfoWindow(
                           onTap: () {
                             AutoRouter.of(context).popAndPush(
                               CreateActivityRoute(
-                                locationInfo: details?.result.name,
+                                locationInfo: LocationModel(
+                                  fullLocation: address ?? '',
+                                  latitude: position?.latitude.toString() ?? '',
+                                  longitude:
+                                      position?.longitude.toString() ?? '',
+                                ),
                               ),
                             );
                           },
-                          title: details?.result.name ?? '',
+                          title: address ?? details?.result.name ?? '',
                           snippet: 'Tap to set route',
                         ),
                       ),

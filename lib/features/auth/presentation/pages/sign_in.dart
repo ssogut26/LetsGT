@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/config/routes/routes.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
+import 'package:letsgt/features/auth/presentation/pages/confirm_reset_password.dart';
 import 'package:letsgt/features/auth/presentation/pages/sign_up.dart';
 import 'package:letsgt/features/auth/presentation/providers/sign_in_providers.dart';
 
@@ -18,68 +19,74 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final signIn = ref.watch(signInProvider);
     return Scaffold(
       body: Form(
         key: _formKey,
         child: Padding(
           padding: AppPaddings.pagePadding,
           child: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).viewInsets.bottom == 0
-                  ? MediaQuery.of(context).size.height
-                  : MediaQuery.of(context).size.height * 0.75,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom == 0
-                        ? MediaQuery.of(context).size.height * 0.1
-                        : MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  const FlutterLogo(
-                    size: 35,
-                  ),
-                  const Column(
-                    children: [
-                      SignInEmailField(),
-                      SignInPasswordField(),
-                    ],
-                  ),
-                  AppElevatedButton(
-                    isLoading: ref.watch(signInProvider).isLoading,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        ref.read(signInProvider.notifier).signIn(ref, context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in the form'),
-                          ),
-                        );
-                      }
-                    },
-                    text: 'Sign In',
-                  ),
-                  Column(
-                    children: [
-                      TextButton(
+            child: Column(
+              children: [
+                resizableHeightBox(
+                  context,
+                  keyboardClosedHeight: 0.2,
+                  keyboardOpenHeight: 0.1,
+                ),
+                const FlutterLogo(
+                  size: 35,
+                ),
+                resizableHeightBox(context),
+                Text(
+                  'Sign in to your account',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                resizableHeightBox(
+                  context,
+                  keyboardClosedHeight: 0.02,
+                ),
+                Column(
+                  children: [
+                    const SignInEmailField(),
+                    const SignInPasswordField(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
                         onPressed: () {
                           AutoRouter.of(context)
                               .push(const ResetPasswordRoute());
                         },
                         child: const Text('Forgot Password?'),
                       ),
-                      TextButton(
-                        child: const Text('Already have an account?'),
-                        onPressed: () {
-                          AutoRouter.of(context).push(const SignUpRoute());
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.06),
+                AppElevatedButton(
+                  isLoading: signIn.isLoading,
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      signIn.signIn(ref, context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in the form'),
+                        ),
+                      );
+                    }
+                  },
+                  text: 'SIGN IN',
+                ),
+                resizableHeightBox(context),
+                TextButton(
+                  child: const Text("Don't have an account? Sign Up"),
+                  onPressed: () {
+                    AutoRouter.of(context).push(const SignUpRoute());
+                  },
+                ),
+                resizableHeightBox(context, keyboardClosedHeight: 0.01),
+              ],
             ),
           ),
         ),
@@ -99,6 +106,7 @@ class SignInEmailField extends ConsumerWidget {
   final String? text;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final signIn = ref.watch(signInProvider);
     return Center(
       child: Padding(
         padding: AppPaddings.fieldAndButtonPadding,
@@ -127,7 +135,7 @@ class SignInEmailField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              ref.read(signInProvider).setEmail = value;
+              signIn.setEmail = value;
             },
             textAlign: TextAlign.center,
             keyboardType: TextInputType.emailAddress,
@@ -148,6 +156,8 @@ class SignInPasswordField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isVisible = ref.watch(isPasswordVisibleProvider);
+    final signIn = ref.watch(signInProvider);
+
     return Center(
       child: Padding(
         padding: AppPaddings.fieldAndButtonPadding,
@@ -181,7 +191,7 @@ class SignInPasswordField extends ConsumerWidget {
               return null;
             },
             onChanged: (String value) {
-              ref.read(signInProvider).setPassword = value;
+              signIn.setPassword = value;
             },
             autofillHints: const [AutofillHints.password],
             textAlign: TextAlign.center,

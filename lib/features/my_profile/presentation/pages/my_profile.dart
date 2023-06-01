@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:letsgt/core/usecases/paddings.dart';
+import 'package:letsgt/features/auth/domain/usecases/auth_usecases.dart';
 import 'package:letsgt/features/auth/services/auth_service.dart';
 
 class SignOutNotifier extends ChangeNotifier {
@@ -30,6 +31,11 @@ final signOutProvider = ChangeNotifierProvider(
   (ref) => SignOutNotifier(),
 );
 
+final getUserNameProvider = FutureProvider<String>((ref) async {
+  final userName = await AuthUseCases().getUserName();
+  return userName;
+});
+
 @RoutePage()
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -37,6 +43,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final singOut = ref.watch(signOutProvider.notifier);
+    final userName = ref.watch(getUserNameProvider);
     return Scaffold(
       body: Padding(
         padding: AppPaddings.pagePadding,
@@ -50,7 +57,16 @@ class ProfilePage extends ConsumerWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text('Name'),
+                    Row(
+                      children: [
+                        userName.when(
+                          error: (error, stackTrace) => const Text('Error'),
+                          data: Text.new,
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
+                        ),
+                      ],
+                    ),
                     Row(
                       children: [
                         const Text('  Status'),
