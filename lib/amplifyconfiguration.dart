@@ -1,3 +1,5 @@
+import 'package:letsgt/core/usecases/environment_variables.dart';
+
 const amplifyconfig = '''
  {
     "UserAgent": "aws-amplify-cli/2.0",
@@ -7,7 +9,7 @@ const amplifyconfig = '''
             "awsAPIPlugin": {
                 "letsgt": {
                     "endpointType": "GraphQL",
-                    "endpoint": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
+                    "endpoint": "${EnvironmentVariables.endpoint}",
                     "region": "eu-central-1",
                     "authorizationType": "AMAZON_COGNITO_USER_POOLS"
                 }
@@ -24,13 +26,13 @@ const amplifyconfig = '''
                 },
                 "AppSync": {
                     "Default": {
-                        "ApiUrl": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
+                        "ApiUrl":"${EnvironmentVariables.endpoint}",
                         "Region": "eu-central-1",
                         "AuthMode": "AMAZON_COGNITO_USER_POOLS",
                         "ClientDatabasePrefix": "letsgt_AMAZON_COGNITO_USER_POOLS"
                     },
                     "letsgt_AWS_IAM": {
-                        "ApiUrl": "https://5tj7to7z7fecznvk2iqogbufmm.appsync-api.eu-central-1.amazonaws.com/graphql",
+                        "ApiUrl": "${EnvironmentVariables.endpoint}",
                         "Region": "eu-central-1",
                         "AuthMode": "AWS_IAM",
                         "ClientDatabasePrefix": "letsgt_AWS_IAM"
@@ -39,15 +41,15 @@ const amplifyconfig = '''
                 "CredentialsProvider": {
                     "CognitoIdentity": {
                         "Default": {
-                            "PoolId": "eu-central-1:54a6e740-dde6-4e31-97eb-8b08e79c58b9",
+                            "PoolId": "PoolId": "${EnvironmentVariables.cognitoIdentityPoolId}",
                             "Region": "eu-central-1"
                         }
                     }
                 },
                 "CognitoUserPool": {
                     "Default": {
-                        "PoolId": "eu-central-1_N2CrNZzN7",
-                        "AppClientId": "2v4kfmfsl4ci3ohe5uef537m1b",
+                         "PoolId": "${EnvironmentVariables.cognitoUserPoolId}",
+                        "AppClientId": "${EnvironmentVariables.clientId}",
                         "Region": "eu-central-1"
                     }
                 },
@@ -94,3 +96,4 @@ const amplifyconfig = '''
         }
     }
 }''';
+
